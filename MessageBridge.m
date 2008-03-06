@@ -166,9 +166,20 @@
     NSLog(@"Hey!  Someone clicked on the notification:  %@", clickContext);
 }
 
+-(void)updateClock:(id)sender
+{
+    [clock setObjectValue:[NSDate date]];
+}
+
 -(void)awakeFromNib {
     NSLog(@"Awake!");
+    [self updateClock:self];
     [GrowlApplicationBridge setGrowlDelegate:self];
+    [NSTimer scheduledTimerWithTimeInterval:1.0
+        target:self
+        selector:@selector(updateClock:)
+        userInfo:nil
+        repeats:YES];
 }
 
 @end
