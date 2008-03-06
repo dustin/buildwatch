@@ -153,11 +153,20 @@ class BuildWatchAppDelegate(NSObject):
         while not self.queue.empty():
             self.queue.get()(self.bridge)
 
+    def initDefaults(self):
+        d=NSMutableDictionary.alloc().initWithCapacity_(1)
+        d.setObject_forKey_("localhost:9988", "location")
+        defaults=NSUserDefaults.standardUserDefaults()
+        defaults.registerDefaults_(d)
+
+    def awakeFromNib(self):
+        self.initDefaults()
+
     def applicationDidFinishLaunching_(self, sender):
         NSLog("Application did finish launching.")
         self.queue=Queue.Queue()
-        # self.bridge=MessageBridge.alloc().init()
-        TwistyThread(TextClient("localhost:9988", self.queue))
+        loc=NSUserDefaults.standardUserDefaults().objectForKey_("location")
+        TwistyThread(TextClient(loc, self.queue))
 
         # Drain the queue from twisted occasionally
         self.timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
