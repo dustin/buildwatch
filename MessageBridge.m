@@ -3,7 +3,7 @@
 //  BuildWatch
 //
 //  Created by Dustin Sallings on 3/5/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
+//  Copyright 2008 Dustin Sallings <dustin@spy.net>. All rights reserved.
 //
 
 #import "MessageBridge.h"
