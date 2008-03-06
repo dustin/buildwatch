@@ -3,3 +3,4 @@ build/
 *.mode2*
 *.pbxuser
 *~.nib
+.DS_Store
