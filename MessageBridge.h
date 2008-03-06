@@ -7,9 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Growl-WithInstaller/GrowlApplicationBridge.h"
 
-
-@interface MessageBridge : NSObject {
+@interface MessageBridge : NSObject <GrowlApplicationBridgeDelegate> {
 
     IBOutlet NSArrayController *builders;
     NSMutableDictionary *builderDict;

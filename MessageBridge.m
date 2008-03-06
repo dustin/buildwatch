@@ -23,7 +23,6 @@
     [b setName:buildername];
     [builders addObject:b];
     [builderDict setObject:b forKey:buildername];
-    NSLog(@"Current builders:  %@", builders);
 }
 
 -(void)builderRemoved:(NSString *)buildername {
@@ -37,6 +36,14 @@
 
 -(void)buildStarted:(NSString *)buildername {
     NSLog(@"A build started on %@", buildername);
+    [GrowlApplicationBridge
+        notifyWithTitle:@"Starting Build"
+        description:buildername
+        notificationName:@"BuildStarted"
+        iconData:nil
+        priority:0
+        isSticky:NO
+        clickContext:nil];
 }
 
 -(void)buildFinished:(NSString *)buildername result:(int)result {
@@ -45,6 +52,25 @@
     [b setLastBuildResult:result];
     [b setEta:nil];
     [b setStepeta:nil];
+    if(result == 0) {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Completed Build"
+            description:buildername
+            notificationName:@"BuildSuccess"
+            iconData:nil
+            priority:0
+            isSticky:NO
+            clickContext:nil];
+    } else {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Build Faiure"
+            description:buildername
+            notificationName:@"BuildFailed"
+            iconData:nil
+            priority:2
+            isSticky:YES
+            clickContext:nil];
+    }
 }
 
 -(void)buildETAUpdate:(NSString *)buildername eta:(NSString *)eta {
@@ -58,12 +84,39 @@
 -(void)stepStarted:(NSString *)buildername stepname:(NSString *)stepname {
     NSLog(@"Build %@ started step %@", buildername, stepname);
     [[builderDict valueForKey:buildername] setStep:stepname];
+    [GrowlApplicationBridge
+        notifyWithTitle:@"Started Step"
+        description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
+        notificationName:@"StepStarted"
+        iconData:nil
+        priority:0
+        isSticky:NO
+        clickContext:nil];
 }
 
 -(void)stepFinished:(NSString *)buildername
     stepname:(NSString *)stepname result:(int)result {
     NSLog(@"Build %@ completed step %@ with %d", buildername, stepname, result);
     [[builderDict valueForKey:buildername] setStep:nil];
+    if(result == 0) {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Completed Step"
+            description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
+            notificationName:@"StepSuccess"
+            iconData:nil
+            priority:0
+            isSticky:NO
+            clickContext:nil];
+    } else {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Step Faiure"
+            description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
+            notificationName:@"StepFailed"
+            iconData:nil
+            priority:2
+            isSticky:YES
+            clickContext:nil];
+    }
 }
 
 -(void)stepETAUpdate:(NSString *)buildername
@@ -73,6 +126,49 @@
         Builder *b=[builderDict valueForKey:buildername];
         [b setStepeta:[NSDate dateWithTimeIntervalSinceNow: [eta doubleValue]]];
     }
+}
+
+- (NSDictionary *) registrationDictionaryForGrowl
+{
+    NSLog(@"Growl wants to know what kinda stuff we do.");
+
+    NSArray *allNotifications=[[NSArray alloc] initWithObjects:
+        @"BuildStarted", @"BuildSuccess", @"BuildFailed", @"StepStarted",
+        @"StepSuccess", @"StepFailed", nil];
+    NSArray *defaultNotifications=[[NSArray alloc] initWithObjects:
+        @"BuildFailed", @"StepFailed", nil];
+
+    NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:
+        allNotifications, GROWL_NOTIFICATIONS_ALL,
+        defaultNotifications, GROWL_NOTIFICATIONS_DEFAULT,
+        nil];
+
+    NSLog(@"Telling it %@", dict);
+
+    [allNotifications release];
+    [defaultNotifications release];
+    [dict autorelease];
+    return(dict);
+}
+
+-(void)growlIsReady
+{
+    NSLog(@"growl is ready");
+}
+
+-(NSString *)applicationNameForGrowl
+{
+    return(@"BuildWatch");
+}
+
+-(void)growlNotificationWasClicked:(id)clickContext
+{
+    NSLog(@"Hey!  Someone clicked on the notification:  %@", clickContext);
+}
+
+-(void)awakeFromNib {
+    NSLog(@"Awake!");
+    [GrowlApplicationBridge setGrowlDelegate:self];
 }
 
 @end
