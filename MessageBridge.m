@@ -47,7 +47,7 @@
 }
 
 -(void)buildFinished:(NSString *)buildername result:(int)result {
-    NSLog(@"A build finished on %@ -- results: %@", buildername, result);
+    NSLog(@"A build finished on %@ -- result: %d", buildername, result);
     Builder *b=[builderDict valueForKey:buildername];
     [b setLastBuildResult:result];
     [b setEta:nil];
