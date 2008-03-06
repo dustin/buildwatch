@@ -11,6 +11,7 @@ from AppKit import *
 
 import sys, re
 import threading
+import Queue
 
 from twisted.spread import pb
 from twisted.cred import credentials, error
@@ -21,42 +22,46 @@ class StatusClient(pb.Referenceable):
     buildmaster's StatusClientPerspective object.
     """ 
 
-    def __init__(self, events):
+    def __init__(self, events, q):
         self.builders = {}
         self.events = events
-    
+        self.queue = q
+
     def connected(self, remote):
         print "connected"
         self.remote = remote
         remote.callRemote("subscribe", self.events, 5, self)
 
     def remote_builderAdded(self, buildername, builder):
-        print "builderAdded", buildername 
+        self.queue.put(lambda b: b.builderAdded_(buildername))
 
     def remote_builderRemoved(self, buildername):
-        print "builderRemoved", buildername
+        self.queue.put(lambda b: b.builderRemoved_(buildername))
 
     def remote_builderChangedState(self, buildername, state, eta):
-        print "builderChangedState", buildername, state, eta
+        self.queue.put(lambda b:
+            b.builderChangedState_state_eta_(buildername, state, str(eta)))
         
     def remote_buildStarted(self, buildername, build):
-        print "buildStarted", buildername
+        self.queue.put(lambda b: b.buildStarted_(buildername))
                           
     def remote_buildFinished(self, buildername, build, results):
-        print "buildFinished", results
+        self.queue.put(lambda b: b.buildFinished_results_(buildername, results))
     
     def remote_buildETAUpdate(self, buildername, build, eta):
-        print "ETA", buildername, eta
+        self.queue.put(lambda b: b.buildETAUpdate_eta_(buildername, eta))
 
     def remote_stepStarted(self, buildername, build, stepname, step):
-        print "stepStarted", buildername, stepname
+        self.queue.put(lambda b: b.stepStarted_stepname_(buildername, stepname))
         
     def remote_stepFinished(self, buildername, build, stepname, step, results):
-        print "stepFinished", buildername, stepname, results
+        self.queue.put(lambda b:
+            b.stepFinished_stepname_results_(buildername, stepname, results[0]))
 
     def remote_stepETAUpdate(self, buildername, build, stepname, step,
                              eta, expectations):
-        print "stepETA", buildername, stepname, eta
+        self.queue.put(lambda b:
+            b.stepETAUpdate_stepname_eta_(buildername, stepname, eta))
 
     def remote_logStarted(self, buildername, build, stepname, step,
                           logname, log):
@@ -72,7 +77,7 @@ class StatusClient(pb.Referenceable):
         print "logChunk[%s]: %s" % (ChunkTypes[channel], text)
 
 class TextClient:
-    def __init__(self, master, events="steps"):
+    def __init__(self, master, delegate, events="steps"):
         """
         @type  events: string, one of builders, builds, steps, logs, full
         @param events: specify what level of detail should be reported.
@@ -84,7 +89,7 @@ class TextClient:
          - 'full': also announce log contents
         """
         self.master = master
-        self.listener = StatusClient(events)
+        self.listener = StatusClient(events, delegate)
 
     def run(self):
         """Start the TextClient."""
@@ -139,6 +144,21 @@ class TwistyThread(threading.Thread):
         self.client.run()
 
 class BuildWatchAppDelegate(NSObject):
+
+    def emptyQueue(self):
+        while not self.queue.empty():
+            self.queue.get()(self.bridge)
+
     def applicationDidFinishLaunching_(self, sender):
         NSLog("Application did finish launching.")
-        TwistyThread(TextClient("localhost:9988"))
+        self.queue=Queue.Queue()
+        self.bridge=MessageBridge.alloc().init()
+        TwistyThread(TextClient("localhost:9988", self.queue))
+
+        # Drain the queue from twisted occasionally
+        self.timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
+            2, self, 'emptyQueue', None, True)
+
+    def applicationWillTerminate_(self, notification):
+        if self.queue.qsize():
+            self.emptyQueue()
