@@ -15,6 +15,7 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		DA3960E40D7F913700090B48 /* MessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3960E30D7F913700090B48 /* MessageBridge.m */; };
+		DAE03EAD0D7FB0EF00518D60 /* Builder.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE03EAC0D7FB0EF00518D60 /* Builder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,8 @@
 		8D1107320486CEB800E47090 /* BuildWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3960E20D7F913700090B48 /* MessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBridge.h; sourceTree = "<group>"; };
 		DA3960E30D7F913700090B48 /* MessageBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBridge.m; sourceTree = "<group>"; };
+		DAE03EAB0D7FB0EF00518D60 /* Builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Builder.h; sourceTree = "<group>"; };
+		DAE03EAC0D7FB0EF00518D60 /* Builder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Builder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +57,8 @@
 				7790198E0C07548A00326F66 /* BuildWatchAppDelegate.py */,
 				DA3960E20D7F913700090B48 /* MessageBridge.h */,
 				DA3960E30D7F913700090B48 /* MessageBridge.m */,
+				DAE03EAB0D7FB0EF00518D60 /* Builder.h */,
+				DAE03EAC0D7FB0EF00518D60 /* Builder.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -185,6 +190,7 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				DA3960E40D7F913700090B48 /* MessageBridge.m in Sources */,
+				DAE03EAD0D7FB0EF00518D60 /* Builder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,9 @@
 
 @interface MessageBridge : NSObject {
 
+    IBOutlet NSArrayController *builders;
+    NSMutableDictionary *builderDict;
+
 }
 
 -(void)builderAdded:(NSString *)buildername;
@@ -19,12 +22,12 @@
 -(void)builderChangedState:(NSString *)buildername state:(NSString *)state eta:(NSString *)eta;
 
 -(void)buildStarted:(NSString *)buildername;
--(void)buildFinished:(NSString *)buildername results:(NSString *)results;
+-(void)buildFinished:(NSString *)buildername result:(int)result;
 -(void)buildETAUpdate:(NSString *)buildername eta:(NSString *)eta;
 
 -(void)stepStarted:(NSString *)buildername stepname:(NSString *)stepname;
 -(void)stepFinished:(NSString *)buildername
-    stepname:(NSString *)stepname results:(NSString *)results;
+    stepname:(NSString *)stepname result:(int)result;
 -(void)stepETAUpdate:(NSString *)buildername
     stepname:(NSString *)stepname eta:(NSString *)eta;
 

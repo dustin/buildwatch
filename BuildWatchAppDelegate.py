@@ -45,8 +45,9 @@ class StatusClient(pb.Referenceable):
     def remote_buildStarted(self, buildername, build):
         self.queue.put(lambda b: b.buildStarted_(buildername))
                           
-    def remote_buildFinished(self, buildername, build, results):
-        self.queue.put(lambda b: b.buildFinished_results_(buildername, results))
+    def remote_buildFinished(self, buildername, build, result):
+        self.queue.put(lambda b:
+            b.buildFinished_result_(buildername, int(result)))
     
     def remote_buildETAUpdate(self, buildername, build, eta):
         self.queue.put(lambda b: b.buildETAUpdate_eta_(buildername, eta))
@@ -54,9 +55,10 @@ class StatusClient(pb.Referenceable):
     def remote_stepStarted(self, buildername, build, stepname, step):
         self.queue.put(lambda b: b.stepStarted_stepname_(buildername, stepname))
         
-    def remote_stepFinished(self, buildername, build, stepname, step, results):
+    def remote_stepFinished(self, buildername, build, stepname, step, result):
         self.queue.put(lambda b:
-            b.stepFinished_stepname_results_(buildername, stepname, results[0]))
+            b.stepFinished_stepname_result_(buildername, stepname,
+                int(result[0])))
 
     def remote_stepETAUpdate(self, buildername, build, stepname, step,
                              eta, expectations):
@@ -145,6 +147,8 @@ class TwistyThread(threading.Thread):
 
 class BuildWatchAppDelegate(NSObject):
 
+    bridge = objc.IBOutlet('bridge')
+
     def emptyQueue(self):
         while not self.queue.empty():
             self.queue.get()(self.bridge)
@@ -152,7 +156,7 @@ class BuildWatchAppDelegate(NSObject):
     def applicationDidFinishLaunching_(self, sender):
         NSLog("Application did finish launching.")
         self.queue=Queue.Queue()
-        self.bridge=MessageBridge.alloc().init()
+        # self.bridge=MessageBridge.alloc().init()
         TwistyThread(TextClient("localhost:9988", self.queue))
 
         # Drain the queue from twisted occasionally
