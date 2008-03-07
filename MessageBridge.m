@@ -27,6 +27,8 @@
 
 -(void)builderRemoved:(NSString *)buildername {
     NSLog(@"Removed builder %@", buildername);
+    [builders removeObject: [builderDict objectForKey:buildername]];
+    [builderDict removeObjectForKey:buildername];
 }
 
 -(void)builderChangedState:(NSString *)buildername state:(NSString *)state eta:(NSString *)eta {
