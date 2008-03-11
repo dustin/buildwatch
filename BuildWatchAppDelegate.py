@@ -78,7 +78,7 @@ class StatusClient(pb.Referenceable):
         ChunkTypes = ["STDOUT", "STDERR", "HEADER"]
         print "logChunk[%s]: %s" % (ChunkTypes[channel], text)
 
-class TextClient:
+class BridgeClient:
     def __init__(self, master, delegate, events="steps"):
         """
         @type  events: string, one of builders, builds, steps, logs, full
@@ -94,7 +94,7 @@ class TextClient:
         self.listener = StatusClient(events, delegate)
 
     def run(self):
-        """Start the TextClient."""
+        """Start the BridgeClient."""
         self.startConnecting()
         reactor.run(False)
 
@@ -112,9 +112,11 @@ class TextClient:
         reactor.connectTCP(host, port, cf)
         d.addCallbacks(self.connected, self.not_connected)
         return d
+
     def connected(self, ref):
         ref.notifyOnDisconnect(self.disconnected)
         self.listener.connected(ref)
+
     def not_connected(self, why):
         if why.check(error.UnauthorizedLogin):
             print """
@@ -123,6 +125,7 @@ buildbot.status.client.PBListener port and not to the slaveport?
 """
         reactor.stop()
         return why
+
     def disconnected(self, ref):
         print "lost connection"
         # we can get here in one of two ways: the buildmaster has
@@ -156,7 +159,7 @@ class BuildWatchAppDelegate(NSObject):
     def startTask_(self, notification):
         loc=notification.object()
         NSLog("Starting task connected to %@", loc)
-        self.tasks[loc]=TwistyThread(TextClient(loc, self.queue))
+        self.tasks[loc]=TwistyThread(BridgeClient(loc, self.queue))
 
     def awakeFromNib(self):
         self.tasks={}
