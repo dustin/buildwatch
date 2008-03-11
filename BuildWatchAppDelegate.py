@@ -153,25 +153,17 @@ class BuildWatchAppDelegate(NSObject):
         while not self.queue.empty():
             self.queue.get()(self.bridge)
 
-    def initDefaults(self):
-        d=NSMutableDictionary.alloc().initWithCapacity_(1)
-        d.setObject_forKey_("localhost:9988", "location")
-        defaults=NSUserDefaults.standardUserDefaults()
-        defaults.registerDefaults_(d)
+    def startTask_(self, notification):
+        loc=notification.object()
+        NSLog("Starting task connected to %@", loc)
+        self.tasks[loc]=TwistyThread(TextClient(loc, self.queue))
 
     def awakeFromNib(self):
-        self.initDefaults()
-
-    def applicationDidFinishLaunching_(self, sender):
-        NSLog("Application did finish launching.")
+        self.tasks={}
         self.queue=Queue.Queue()
-        loc=NSUserDefaults.standardUserDefaults().objectForKey_("location")
-        TwistyThread(TextClient(loc, self.queue))
 
-        # Drain the queue from twisted occasionally
+        NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(
+            self, 'startTask:', 'connect', None)
+
         self.timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
             2, self, 'emptyQueue', None, True)
-
-    def applicationWillTerminate_(self, notification):
-        if self.queue.qsize():
-            self.emptyQueue()
