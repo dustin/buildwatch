@@ -12,7 +12,6 @@
 @interface MessageBridge : NSObject <GrowlApplicationBridgeDelegate> {
 
     IBOutlet NSArrayController *builders;
-    IBOutlet NSTextField *clock;
     NSMutableDictionary *builderDict;
 
 }

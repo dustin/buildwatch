@@ -22,6 +22,7 @@
 		DAE03F870D7FCA2300518D60 /* Growl-WithInstaller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAE03F750D7FC96F00518D60 /* Growl-WithInstaller.framework */; };
 		DAE0890B0D8643320030EFFE /* PrefController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE0890A0D8643320030EFFE /* PrefController.m */; };
 		DAE268920D86E5AE0025AE3E /* ApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE268910D86E5AE0025AE3E /* ApplicationDelegate.m */; };
+		DAE268DB0D86E94B0025AE3E /* MainController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE268DA0D86E94B0025AE3E /* MainController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,6 +63,8 @@
 		DAE0890A0D8643320030EFFE /* PrefController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrefController.m; sourceTree = "<group>"; };
 		DAE268900D86E5AE0025AE3E /* ApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationDelegate.h; sourceTree = "<group>"; };
 		DAE268910D86E5AE0025AE3E /* ApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationDelegate.m; sourceTree = "<group>"; };
+		DAE268D90D86E94B0025AE3E /* MainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainController.h; sourceTree = "<group>"; };
+		DAE268DA0D86E94B0025AE3E /* MainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +94,8 @@
 				DAE0890A0D8643320030EFFE /* PrefController.m */,
 				DAE268900D86E5AE0025AE3E /* ApplicationDelegate.h */,
 				DAE268910D86E5AE0025AE3E /* ApplicationDelegate.m */,
+				DAE268D90D86E94B0025AE3E /* MainController.h */,
+				DAE268DA0D86E94B0025AE3E /* MainController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -228,6 +233,7 @@
 				DAE03EAD0D7FB0EF00518D60 /* Builder.m in Sources */,
 				DAE0890B0D8643320030EFFE /* PrefController.m in Sources */,
 				DAE268920D86E5AE0025AE3E /* ApplicationDelegate.m in Sources */,
+				DAE268DB0D86E94B0025AE3E /* MainController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
