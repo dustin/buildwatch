@@ -26,5 +26,9 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+    <key>SUFeedURL</key>
+    <string>http://public.west.spy.net/app/buildwatch.xml</string>
+    <key>SUScheduledCheckInterval</key>
+    <integer>86400</integer>
 </dict>
 </plist>

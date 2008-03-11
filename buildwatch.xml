@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2007  Dustin Sallings (dustin@spy.net) -->
+
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"> 
+
+	<channel>
+		<title>Updates for BuildWatch</title>
+		<link>http://public.west.spy.net/app/buildwatch.xml</link>
+		<description>Recent changes to BuildWatch.</description>
+		<language>en</language>
+		<item>
+			<title>Version 1.0</title>
+			<description>
+				&lt;p>
+					The initial version works well enough for me, but can go a little
+					further.
+				&lt;/p>
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Tue, 06 Nov 2007 21:55:54 GMT</pubDate>
+			<enclosure url="http://public.west.spy.net/app/AppHider_1.2.6.zip"
+				length="3333853" type="application/octet-stream"/>
+		</item>
+	</channel>
+</rss>
