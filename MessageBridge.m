@@ -72,7 +72,7 @@
             clickContext:nil];
     } else {
         [GrowlApplicationBridge
-            notifyWithTitle:@"Build Faiure"
+            notifyWithTitle:@"Build Failure"
             description:buildername
             notificationName:@"BuildFailed"
             iconData:nil
@@ -118,7 +118,7 @@
             clickContext:nil];
     } else {
         [GrowlApplicationBridge
-            notifyWithTitle:@"Step Faiure"
+            notifyWithTitle:@"Step Failure"
             description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
             notificationName:@"StepFailed"
             iconData:nil
