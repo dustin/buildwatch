@@ -11,6 +11,21 @@
 		<description>Recent changes to BuildWatch.</description>
 		<language>en</language>
 		<item>
+			<title>Version 1.0.1</title>
+			<description>
+				&lt;p>
+					Did a little bit of cleanup around the preferences.  It actually
+					closes the window for you now and lets you know that I suck and can't
+					have the changes immediately take effect.
+				&lt;/p>
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Tue, 11 Mar 2008 05:15:44 GMT</pubDate>
+			<enclosure
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.1.zip"
+				length="3349016" type="application/octet-stream"/>
+		</item>
+		<item>
 			<title>Version 1.0</title>
 			<description>
 				&lt;p>
@@ -18,7 +33,6 @@
 					further.
 				&lt;/p>
 			</description>
-			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
 			<pubDate>Tue, 11 Mar 2008 04:00:36 GMT</pubDate>
 			<enclosure
 				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.zip"
