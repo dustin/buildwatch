@@ -79,7 +79,7 @@ class StatusClient(pb.Referenceable):
         print "logChunk[%s]: %s" % (ChunkTypes[channel], text)
 
 class BridgeClient:
-    def __init__(self, master, delegate, events="steps"):
+    def __init__(self, master, queue, events="steps"):
         """
         @type  events: string, one of builders, builds, steps, logs, full
         @param events: specify what level of detail should be reported.
@@ -91,7 +91,8 @@ class BridgeClient:
          - 'full': also announce log contents
         """
         self.master = master
-        self.listener = StatusClient(events, delegate)
+        self.queue = queue
+        self.listener = StatusClient(events, queue)
 
     def run(self):
         """Start the BridgeClient."""
@@ -113,6 +114,10 @@ class BridgeClient:
         d.addCallbacks(self.connected, self.not_connected)
         return d
 
+    def retry(self):
+        print "Retrying in 5s"
+        reactor.callLater(5, self.startConnecting)
+
     def connected(self, ref):
         ref.notifyOnDisconnect(self.disconnected)
         self.listener.connected(ref)
@@ -123,20 +128,16 @@ class BridgeClient:
 Unable to login.. are you sure we are connecting to a
 buildbot.status.client.PBListener port and not to the slaveport?
 """
-        reactor.stop()
+        self.retry()
         return why
 
     def disconnected(self, ref):
         print "lost connection"
-        # we can get here in one of two ways: the buildmaster has
-        # disconnected us (probably because it shut itself down), or because
-        # we've been SIGINT'ed. In the latter case, our reactor is already
-        # shut down, but we have no easy way of detecting that. So protect
-        # our attempt to shut down the reactor.
-        try:
-            reactor.stop()
-        except RuntimeError:
-            pass
+        def sendNotification(notused):
+            NSNotificationCenter.defaultCenter().postNotificationName_object_(
+                'disconnected', self.master)
+        self.queue.put(sendNotification)
+        self.retry()
 
 class TwistyThread(threading.Thread):
     def __init__(self, client):

@@ -31,6 +31,13 @@
     [builderDict removeObjectForKey:buildername];
 }
 
+-(void)disconnected:(id)sender {
+    NSAutoreleasePool *pool=[[NSAutoreleasePool alloc] init];
+    [builders removeObjects:[builderDict allValues]];
+    [builderDict removeAllObjects];
+    [pool release];
+}
+
 -(void)builderChangedState:(NSString *)buildername state:(NSString *)state eta:(NSString *)eta {
     NSLog(@"Builder %@ changed state to %@.  Eta is %@", buildername, state, eta);
     [[builderDict valueForKey:buildername] setStatus:state];
@@ -170,6 +177,8 @@
 
 -(void)awakeFromNib {
     [GrowlApplicationBridge setGrowlDelegate:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+        selector:@selector(disconnected:) name:@"disconnected" object:nil];
 }
 
 @end
