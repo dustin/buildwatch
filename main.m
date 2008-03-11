@@ -3,7 +3,7 @@
 //  BuildWatch
 //
 //  Created by Dustin Sallings on 2/28/08.
-//  Copyright __MyCompanyName__ 2008. All rights reserved.
+//  Copyright Dustin Sallings <dustin@spy.net> 2008. All rights reserved.
 //
 
 #import <Python/Python.h>
