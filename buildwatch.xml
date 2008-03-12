@@ -11,7 +11,7 @@
 		<description>Recent changes to BuildWatch.</description>
 		<language>en</language>
 		<item>
-			<title>Version 1.0.2</title>
+			<title>Version 1.0.3</title>
 			<description>
 				&lt;p>
 					Some more cleanup.
@@ -19,13 +19,14 @@
 				&lt;ul>
 					&lt;li>Reconnect handling&lt;/li>
 					&lt;li>Internal restructuring&lt;/li>
+					&lt;li>bug fixes&lt;/li>
 				&lt;/ul>
 			</description>
 			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
-			<pubDate>Wed, 12 Mar 2008 06:38:02 GMT</pubDate>
+			<pubDate>Wed, 12 Mar 2008 07:00:01 GMT</pubDate>
 			<enclosure
-				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.2.zip"
-				length="3346464" type="application/octet-stream"/>
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.3.zip"
+				length="3346518" type="application/octet-stream"/>
 		</item>
 		<item>
 			<title>Version 1.0.1</title>
