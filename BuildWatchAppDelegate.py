@@ -162,12 +162,23 @@ class BuildWatchAppDelegate(NSObject):
         NSLog("Starting task connected to %@", loc)
         self.tasks[loc]=TwistyThread(BridgeClient(loc, self.queue))
 
+    def stopTask_(self, notification):
+        NSLog("Requested to stop task %@", loc)
+
+    def stopAll_(self, notification):
+        NSLog("Requestd to stop all tasks.")
+
     def awakeFromNib(self):
         self.tasks={}
         self.queue=Queue.Queue()
 
         NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(
             self, 'startTask:', 'connect', None)
+        NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(
+            self, 'stopTask:', 'disconnect', None)
+        NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(
+            self, 'stopAll:', 'disconnectAll', None)
+
 
         self.timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
             2, self, 'emptyQueue', None, True)

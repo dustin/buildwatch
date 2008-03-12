@@ -14,12 +14,13 @@
 - (IBAction) savePrefs:(id)sender {
 	NSLog(@"Saving preferences.");
 	[defController save:self];
+    [[NSNotificationCenter defaultCenter]
+        postNotificationName: @"disconnectAll" object: nil];
+    [[NSNotificationCenter defaultCenter]
+        postNotificationName: @"connect"
+        object: [[NSUserDefaults standardUserDefaults] objectForKey:@"location"]];
+
 	[[self window] orderOut:self];
-	if(NSRunAlertPanel(@"Restart Required",
-			@"Because I'm lame, you must restart this application for your changes to take effect.",
-			@"Quit", @"Don't Quit", nil)) {
-		[NSApp stop:self];
-	}
 }
 
 @end
