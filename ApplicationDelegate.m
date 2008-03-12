@@ -17,6 +17,10 @@
     [[NSUserDefaults standardUserDefaults] registerDefaults:d];
 }
 
+-(void)awakeFromNib {
+	[self initDefaults];
+}
+
 -(void)applicationDidFinishLaunching:(id)sender {
     NSLog(@"Application did finish launching.");
     [[NSNotificationCenter defaultCenter]
