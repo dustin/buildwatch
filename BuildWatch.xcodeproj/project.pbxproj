@@ -17,6 +17,7 @@
 		DA2AC8F60D86370C00F34EA8 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA2AC8F50D86370C00F34EA8 /* Sparkle.framework */; };
 		DA2AC8FC0D86372D00F34EA8 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA2AC8F50D86370C00F34EA8 /* Sparkle.framework */; };
 		DA3960E40D7F913700090B48 /* MessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3960E30D7F913700090B48 /* MessageBridge.m */; };
+		DA6007B90DB95BAA00237DC9 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = DA6007B70DB95BAA00237DC9 /* Credits.html */; };
 		DA69994A0DB953AE0007E38B /* keyboard_leds.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6999490DB953AE0007E38B /* keyboard_leds.c */; };
 		DA6999630DB956A70007E38B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6999620DB956A70007E38B /* IOKit.framework */; };
 		DAE03EAD0D7FB0EF00518D60 /* Builder.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE03EAC0D7FB0EF00518D60 /* Builder.m */; };
@@ -58,6 +59,7 @@
 		DA2AC8F50D86370C00F34EA8 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		DA3960E20D7F913700090B48 /* MessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBridge.h; sourceTree = "<group>"; };
 		DA3960E30D7F913700090B48 /* MessageBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBridge.m; sourceTree = "<group>"; };
+		DA6007B80DB95BAA00237DC9 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = English; path = English.lproj/Credits.html; sourceTree = "<group>"; };
 		DA6999490DB953AE0007E38B /* keyboard_leds.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = keyboard_leds.c; sourceTree = "<group>"; };
 		DA6999500DB954050007E38B /* keyboard_leds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keyboard_leds.h; sourceTree = "<group>"; };
 		DA6999620DB956A70007E38B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
@@ -163,6 +165,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DA6007B70DB95BAA00237DC9 /* Credits.html */,
 				77C8C1F70C07829500965286 /* MainMenu.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -227,6 +230,7 @@
 				77631A3F0C0748CF005415CB /* main.py in Resources */,
 				7790198F0C07548A00326F66 /* BuildWatchAppDelegate.py in Resources */,
 				77C8C1F90C07829500965286 /* MainMenu.xib in Resources */,
+				DA6007B90DB95BAA00237DC9 /* Credits.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +268,14 @@
 				77C8C1F80C07829500965286 /* English */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		DA6007B70DB95BAA00237DC9 /* Credits.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA6007B80DB95BAA00237DC9 /* English */,
+			);
+			name = Credits.html;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
