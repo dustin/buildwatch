@@ -8,6 +8,7 @@
 
 #import "MessageBridge.h"
 #import "Builder.h"
+#import "keyboard_leds.h"
 
 @implementation MessageBridge
 
@@ -71,6 +72,7 @@
             isSticky:NO
             clickContext:nil];
     } else {
+        manipulate_led(kHIDUsage_LED_CapsLock, 1);
         [GrowlApplicationBridge
             notifyWithTitle:@"Build Failure"
             description:buildername
@@ -78,7 +80,7 @@
             iconData:nil
             priority:2
             isSticky:YES
-            clickContext:nil];
+            clickContext:@"Failure Notice"];
     }
 }
 
@@ -173,6 +175,7 @@
 -(void)growlNotificationWasClicked:(id)clickContext
 {
     NSLog(@"Hey!  Someone clicked on the notification:  %@", clickContext);
+    manipulate_led(kHIDUsage_LED_CapsLock, 0);
 }
 
 -(void)awakeFromNib {

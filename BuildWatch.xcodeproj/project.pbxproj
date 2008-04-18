@@ -17,6 +17,8 @@
 		DA2AC8F60D86370C00F34EA8 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA2AC8F50D86370C00F34EA8 /* Sparkle.framework */; };
 		DA2AC8FC0D86372D00F34EA8 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA2AC8F50D86370C00F34EA8 /* Sparkle.framework */; };
 		DA3960E40D7F913700090B48 /* MessageBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3960E30D7F913700090B48 /* MessageBridge.m */; };
+		DA69994A0DB953AE0007E38B /* keyboard_leds.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6999490DB953AE0007E38B /* keyboard_leds.c */; };
+		DA6999630DB956A70007E38B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6999620DB956A70007E38B /* IOKit.framework */; };
 		DAE03EAD0D7FB0EF00518D60 /* Builder.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE03EAC0D7FB0EF00518D60 /* Builder.m */; };
 		DAE03F760D7FC96F00518D60 /* Growl-WithInstaller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE03F750D7FC96F00518D60 /* Growl-WithInstaller.framework */; };
 		DAE03F870D7FCA2300518D60 /* Growl-WithInstaller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAE03F750D7FC96F00518D60 /* Growl-WithInstaller.framework */; };
@@ -56,6 +58,9 @@
 		DA2AC8F50D86370C00F34EA8 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		DA3960E20D7F913700090B48 /* MessageBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBridge.h; sourceTree = "<group>"; };
 		DA3960E30D7F913700090B48 /* MessageBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBridge.m; sourceTree = "<group>"; };
+		DA6999490DB953AE0007E38B /* keyboard_leds.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = keyboard_leds.c; sourceTree = "<group>"; };
+		DA6999500DB954050007E38B /* keyboard_leds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keyboard_leds.h; sourceTree = "<group>"; };
+		DA6999620DB956A70007E38B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		DAE03EAB0D7FB0EF00518D60 /* Builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Builder.h; sourceTree = "<group>"; };
 		DAE03EAC0D7FB0EF00518D60 /* Builder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Builder.m; sourceTree = "<group>"; };
 		DAE03F750D7FC96F00518D60 /* Growl-WithInstaller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "Growl-WithInstaller.framework"; sourceTree = "<group>"; };
@@ -76,6 +81,7 @@
 				77631A270C06C501005415CB /* Python.framework in Frameworks */,
 				DAE03F760D7FC96F00518D60 /* Growl-WithInstaller.framework in Frameworks */,
 				DA2AC8F60D86370C00F34EA8 /* Sparkle.framework in Frameworks */,
+				DA6999630DB956A70007E38B /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +100,8 @@
 				DAE0890A0D8643320030EFFE /* PrefController.m */,
 				DAE268900D86E5AE0025AE3E /* ApplicationDelegate.h */,
 				DAE268910D86E5AE0025AE3E /* ApplicationDelegate.m */,
+				DA6999500DB954050007E38B /* keyboard_leds.h */,
+				DA6999490DB953AE0007E38B /* keyboard_leds.c */,
 				DAE268D90D86E94B0025AE3E /* MainController.h */,
 				DAE268DA0D86E94B0025AE3E /* MainController.m */,
 			);
@@ -114,6 +122,7 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA6999620DB956A70007E38B /* IOKit.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
@@ -234,6 +243,7 @@
 				DAE0890B0D8643320030EFFE /* PrefController.m in Sources */,
 				DAE268920D86E5AE0025AE3E /* ApplicationDelegate.m in Sources */,
 				DAE268DB0D86E94B0025AE3E /* MainController.m in Sources */,
+				DA69994A0DB953AE0007E38B /* keyboard_leds.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
