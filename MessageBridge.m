@@ -72,7 +72,9 @@
             isSticky:NO
             clickContext:nil];
     } else {
-        manipulate_led(kHIDUsage_LED_CapsLock, 1);
+        if([[NSUserDefaults standardUserDefaults] boolForKey:@"location"]) {
+            manipulate_led(kHIDUsage_LED_CapsLock, 1);
+        }
         [GrowlApplicationBridge
             notifyWithTitle:@"Build Failure"
             description:buildername
@@ -175,7 +177,9 @@
 -(void)growlNotificationWasClicked:(id)clickContext
 {
     NSLog(@"Hey!  Someone clicked on the notification:  %@", clickContext);
-    manipulate_led(kHIDUsage_LED_CapsLock, 0);
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"location"]) {
+        manipulate_led(kHIDUsage_LED_CapsLock, 0);
+    }
 }
 
 -(void)awakeFromNib {

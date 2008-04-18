@@ -14,6 +14,7 @@
 -(void)initDefaults {
     NSMutableDictionary *d=[[NSMutableDictionary alloc] initWithCapacity:1];
     [d setObject:@"localhost:9988" forKey:@"location"];
+    [d setObject:[NSNumber numberWithBool: YES] forKey:@"useCapsLock"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:d];
 }
 
