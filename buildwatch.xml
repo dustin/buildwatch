@@ -11,6 +11,26 @@
 		<description>Recent changes to BuildWatch.</description>
 		<language>en</language>
 		<item>
+			<title>Version 1.0.4</title>
+			<description>
+				&lt;p>
+					Finally fixed an annoying misbehavior that's been bothering me as
+					long as I've been running this thing &mdash; having to sort the
+					stupid list every time I start the app.  Now it can remember and do
+					it for me.
+				&lt;/p>
+				&lt;ul>
+					&lt;li>Remember the sort order across restarts&lt;/li>
+					&lt;li>Optionally use the caps lock light to point out build failures&lt;/li>
+				&lt;/ul>
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Wed, 24 Dec 2008 00:13:37 GMT</pubDate>
+			<enclosure
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.4.zip"
+				length="3353970" type="application/octet-stream"/>
+		</item>
+		<item>
 			<title>Version 1.0.3</title>
 			<description>
 				&lt;p>
@@ -22,7 +42,6 @@
 					&lt;li>bug fixes&lt;/li>
 				&lt;/ul>
 			</description>
-			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
 			<pubDate>Wed, 12 Mar 2008 07:00:01 GMT</pubDate>
 			<enclosure
 				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.3.zip"
