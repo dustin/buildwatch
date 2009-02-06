@@ -9,13 +9,17 @@
 from Foundation import *
 from AppKit import *
 
+import time
 import sys, re
 import threading
 import Queue
 
 from twisted.spread import pb
 from twisted.cred import credentials, error
-from twisted.internet import reactor
+from twisted.internet import reactor, task
+
+PING_FREQUENCY = 60 * 5
+PING_TIMEOUT = 15
 
 class StatusClient(pb.Referenceable):
     """To use this, call my .connected method with a RemoteReference to the
@@ -93,6 +97,7 @@ class BridgeClient:
         self.master = master
         self.queue = queue
         self.listener = StatusClient(events, queue)
+        self.lastMessage = time.time()
 
     def run(self):
         """Start the BridgeClient."""
@@ -114,13 +119,29 @@ class BridgeClient:
         d.addCallbacks(self.connected, self.not_connected)
         return d
 
+    def checkTimeout(self, t):
+        if t == self.lastMessage:
+            print "Timed out.  Let's hang up or something."
+            self.remote.broker.transport.loseConnection()
+
+    def ping(self):
+        print "Doing ping."
+        def recordResponse(x):
+            print "Ping response:  %s" % x
+            self.lastMessage = time.time()
+        reactor.callLater(PING_TIMEOUT, self.checkTimeout, self.lastMessage)
+        self.remote.callRemote('ping').addBoth(recordResponse)
+
     def retry(self):
         print "Retrying in 5s"
         reactor.callLater(5, self.startConnecting)
 
     def connected(self, ref):
         ref.notifyOnDisconnect(self.disconnected)
+        self.remote = ref
         self.listener.connected(ref)
+        self.pinger = task.LoopingCall(self.ping)
+        self.pinger.start(PING_FREQUENCY)
 
     def not_connected(self, why):
         if why.check(error.UnauthorizedLogin):
@@ -133,6 +154,7 @@ buildbot.status.client.PBListener port and not to the slaveport?
 
     def disconnected(self, ref):
         print "lost connection"
+        self.pinger.stop()
         def sendNotification(notused):
             NSNotificationCenter.defaultCenter().postNotificationName_object_(
                 'disconnected', self.master)
