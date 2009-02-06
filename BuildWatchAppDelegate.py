@@ -20,7 +20,7 @@ from twisted.internet import reactor
 class StatusClient(pb.Referenceable):
     """To use this, call my .connected method with a RemoteReference to the
     buildmaster's StatusClientPerspective object.
-    """ 
+    """
 
     def __init__(self, events, q):
         self.builders = {}
@@ -41,20 +41,20 @@ class StatusClient(pb.Referenceable):
     def remote_builderChangedState(self, buildername, state, eta):
         self.queue.put(lambda b:
             b.builderChangedState_state_eta_(buildername, state, str(eta)))
-        
+
     def remote_buildStarted(self, buildername, build):
         self.queue.put(lambda b: b.buildStarted_(buildername))
-                          
+
     def remote_buildFinished(self, buildername, build, result):
         self.queue.put(lambda b:
             b.buildFinished_result_(buildername, int(result)))
-    
+
     def remote_buildETAUpdate(self, buildername, build, eta):
         self.queue.put(lambda b: b.buildETAUpdate_eta_(buildername, eta))
 
     def remote_stepStarted(self, buildername, build, stepname, step):
         self.queue.put(lambda b: b.stepStarted_stepname_(buildername, stepname))
-        
+
     def remote_stepFinished(self, buildername, build, stepname, step, result):
         self.queue.put(lambda b:
             b.stepFinished_stepname_result_(buildername, stepname,
