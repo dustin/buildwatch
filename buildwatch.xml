@@ -11,6 +11,23 @@
 		<description>Recent changes to BuildWatch.</description>
 		<language>en</language>
 		<item>
+			<title>Version 1.0.5</title>
+			<description>
+				&lt;p>
+          This release adds connectivity robustness by periodically
+          testing the connection.  I've been stuck in a place where
+          connectivity is spotty and would find that BuildWatch was no
+          longer watching my builds, but pretending like it was.
+				&lt;/p>
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Fri, 06 Feb 2009 00:17:37 GMT</pubDate>
+			<enclosure
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.5.zip"
+				length="3354210" type="application/octet-stream"/>
+		</item>
+
+		<item>
 			<title>Version 1.0.4</title>
 			<description>
 				&lt;p>
@@ -24,7 +41,6 @@
 					&lt;li>Optionally use the caps lock light to point out build failures&lt;/li>
 				&lt;/ul>
 			</description>
-			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
 			<pubDate>Wed, 24 Dec 2008 00:13:37 GMT</pubDate>
 			<enclosure
 				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.4.zip"
