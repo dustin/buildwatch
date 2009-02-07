@@ -98,11 +98,8 @@ class BridgeClient:
         self.queue = queue
         self.listener = StatusClient(events, queue)
         self.lastMessage = time.time()
-
-    def run(self):
-        """Start the BridgeClient."""
-        self.startConnecting()
-        reactor.run(False)
+        self.remote = None
+        self.running = True
 
     def startConnecting(self):
         try:
@@ -119,10 +116,18 @@ class BridgeClient:
         d.addCallbacks(self.connected, self.not_connected)
         return d
 
+    def shutdown(self):
+        self.running = False
+        self.hangUp()
+
+    def hangUp(self):
+        if self.remote:
+            self.remote.broker.transport.loseConnection()
+
     def checkTimeout(self, t):
         if t == self.lastMessage:
             print "Timed out.  Let's hang up or something."
-            self.remote.broker.transport.loseConnection()
+            self.hangUp()
 
     def ping(self):
         print "Doing ping."
@@ -133,8 +138,9 @@ class BridgeClient:
         self.remote.callRemote('ping').addBoth(recordResponse)
 
     def retry(self):
-        print "Retrying in 5s"
-        reactor.callLater(5, self.startConnecting)
+        if self.running:
+            print "Retrying in 5s"
+            reactor.callLater(5, self.startConnecting)
 
     def connected(self, ref):
         ref.notifyOnDisconnect(self.disconnected)
@@ -162,14 +168,13 @@ buildbot.status.client.PBListener port and not to the slaveport?
         self.retry()
 
 class TwistyThread(threading.Thread):
-    def __init__(self, client):
+    def __init__(self):
         threading.Thread.__init__(self)
-        self.client=client
         self.setName("Reactor thread")
         self.start()
 
     def run(self):
-        self.client.run()
+        reactor.run(False)
 
 class BuildWatchAppDelegate(NSObject):
 
@@ -182,15 +187,23 @@ class BuildWatchAppDelegate(NSObject):
     def startTask_(self, notification):
         loc=notification.object()
         NSLog("Starting task connected to %@", loc)
-        self.tasks[loc]=TwistyThread(BridgeClient(loc, self.queue))
+        bc = BridgeClient(loc, self.queue)
+        self.tasks[loc] = bc
+        reactor.callFromThread(bc.startConnecting)
 
     def stopTask_(self, notification):
         NSLog("Requested to stop task %@", loc)
+        self.tasks[loc].shutdown()
+        del self.tasks[loc]
 
     def stopAll_(self, notification):
-        NSLog("Requestd to stop all tasks.")
+        NSLog("Requested to stop all tasks.")
+        for loc,bridge in self.tasks.iteritems():
+            bridge.shutdown()
+        self.tasks.clear()
 
     def awakeFromNib(self):
+        self.thread = TwistyThread()
         self.tasks={}
         self.queue=Queue.Queue()
 
@@ -200,7 +213,6 @@ class BuildWatchAppDelegate(NSObject):
             self, 'stopTask:', 'disconnect', None)
         NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(
             self, 'stopAll:', 'disconnectAll', None)
-
 
         self.timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
             2, self, 'emptyQueue', None, True)
