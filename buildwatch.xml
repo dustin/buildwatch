@@ -11,6 +11,27 @@
 		<description>Recent changes to BuildWatch.</description>
 		<language>en</language>
 		<item>
+			<title>Version 1.0.6</title>
+			<description>
+				&lt;p>
+          Fixed a long-standing and annoying problem where you had to
+          restart the app whenever you changed configuration.
+          Restructured some of the internals to make this possible by
+          doing more things the Right Way.
+				&lt;/p>
+        &lt;p>
+          This hopefully gets me in a much better position to running
+          against multiple buildbots at the same time.
+        &lt;/p>
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Sat, 07 Feb 2009 02:56:05 GMT</pubDate>
+			<enclosure
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.6.zip"
+				length="3353995" type="application/octet-stream"/>
+		</item>
+
+		<item>
 			<title>Version 1.0.5</title>
 			<description>
 				&lt;p>
@@ -20,7 +41,6 @@
           longer watching my builds, but pretending like it was.
 				&lt;/p>
 			</description>
-			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
 			<pubDate>Fri, 06 Feb 2009 00:17:37 GMT</pubDate>
 			<enclosure
 				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.5.zip"
