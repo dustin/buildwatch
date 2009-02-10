@@ -10,6 +10,28 @@
 		<link>http://public.west.spy.net/app/buildwatch.xml</link>
 		<description>Recent changes to BuildWatch.</description>
 		<language>en</language>
+
+		<item>
+			<title>Version 1.0.7</title>
+			<description>
+				&lt;p>
+          I can tell the difference between a build failure and
+          warning now and offer different growl notifications (and
+          listing display) for each.
+				&lt;/p>
+        &lt;p>
+          I'd been reading the wrong config entry for caps lock
+          support, so the preference was just ignored.  Now I'll
+          happily hijack your keyboard's caps lock as a build status indicator.
+        &lt;/p>
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Tue, 10 Feb 2009 04:18:13 GMT</pubDate>
+			<enclosure
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.7.zip"
+				length="3354130" type="application/octet-stream"/>
+		</item>
+
 		<item>
 			<title>Version 1.0.6</title>
 			<description>
@@ -24,7 +46,6 @@
           against multiple buildbots at the same time.
         &lt;/p>
 			</description>
-			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
 			<pubDate>Sat, 07 Feb 2009 02:56:05 GMT</pubDate>
 			<enclosure
 				url="http://buildwatch.googlecode.com/files/BuildWatch_1.0.6.zip"
