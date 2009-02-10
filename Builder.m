@@ -98,8 +98,10 @@
 - (NSColor *)color {
     NSColor *rv;
     if([status isEqualToString:@"idle"]) {
-        if(lastBuildResult == 0) {
+        if(lastBuildResult == BUILDBOT_SUCCESS) {
             rv=[NSColor blackColor];
+        } else if(lastBuildResult == BUILDBOT_WARNING) {
+            rv=[NSColor orangeColor];
         } else {
             rv=[NSColor redColor];
         }

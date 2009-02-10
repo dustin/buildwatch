@@ -62,13 +62,22 @@
     [b setLastBuildResult:result];
     [b setEta:nil];
     [b setStepeta:nil];
-    if(result == 0) {
+    if(result == BUILDBOT_SUCCESS) {
         [GrowlApplicationBridge
             notifyWithTitle:@"Completed Build"
             description:buildername
             notificationName:@"BuildSuccess"
             iconData:nil
             priority:0
+            isSticky:NO
+            clickContext:nil];
+    } else if(result == BUILDBOT_WARNING) {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Warnings in Build"
+            description:buildername
+            notificationName:@"BuildWarnings"
+            iconData:nil
+            priority:1
             isSticky:NO
             clickContext:nil];
     } else {
@@ -111,7 +120,7 @@
     stepname:(NSString *)stepname result:(int)result {
     NSLog(@"Build %@ completed step %@ with %d", buildername, stepname, result);
     [[builderDict valueForKey:buildername] setStep:nil];
-    if(result == 0) {
+    if(result == BUILDBOT_SUCCESS) {
         [GrowlApplicationBridge
             notifyWithTitle:@"Completed Step"
             description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
@@ -119,6 +128,15 @@
             iconData:nil
             priority:0
             isSticky:NO
+            clickContext:nil];
+    } else if(result == BUILDBOT_WARNING) {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Step Warning"
+            description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
+            notificationName:@"StepWarning"
+            iconData:nil
+            priority:1
+            isSticky:YES
             clickContext:nil];
     } else {
         [GrowlApplicationBridge
@@ -146,10 +164,16 @@
     NSLog(@"Growl wants to know what kinda stuff we do.");
 
     NSArray *allNotifications=[[NSArray alloc] initWithObjects:
-        @"BuildStarted", @"BuildSuccess", @"BuildFailed", @"StepStarted",
-        @"StepSuccess", @"StepFailed", nil];
+                                                   @"BuildStarted",
+                                               @"BuildSuccess", @"BuildWarnings",
+                                               @"BuildFailed", @"StepStarted",
+                                               @"StepSuccess", @"StepWarning",
+                                               @"StepFailed", nil];
     NSArray *defaultNotifications=[[NSArray alloc] initWithObjects:
-        @"BuildFailed", @"StepFailed", nil];
+                                                       @"BuildFailed",
+                                                   @"BuildWarnings",
+                                                   @"StepWarning",
+                                                   @"StepFailed", nil];
 
     NSDictionary *dict=[[NSDictionary alloc] initWithObjectsAndKeys:
         allNotifications, GROWL_NOTIFICATIONS_ALL,

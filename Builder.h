@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define BUILDBOT_SUCCESS 0
+#define BUILDBOT_WARNING 1
+#define BUILDBOT_FAILURE 2
 
 @interface Builder : NSObject {
 
