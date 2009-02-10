@@ -81,7 +81,7 @@
             isSticky:NO
             clickContext:nil];
     } else {
-        if([[NSUserDefaults standardUserDefaults] boolForKey:@"location"]) {
+        if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCapsLock"]) {
             manipulate_led(kHIDUsage_LED_CapsLock, 1);
         }
         [GrowlApplicationBridge
@@ -201,7 +201,7 @@
 -(void)growlNotificationWasClicked:(id)clickContext
 {
     NSLog(@"Hey!  Someone clicked on the notification:  %@", clickContext);
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"location"]) {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCapsLock"]) {
         manipulate_led(kHIDUsage_LED_CapsLock, 0);
     }
 }
