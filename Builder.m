@@ -105,6 +105,8 @@
         } else {
             rv=[NSColor redColor];
         }
+    } else if([status isEqualToString:@"offline"]) {
+        rv = [NSColor redColor];
     } else {
         rv=[NSColor colorWithCalibratedRed:0.0 green:0.5 blue:0.0 alpha:1.0];
     }
