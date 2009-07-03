@@ -26,6 +26,17 @@
     }
 }
 
+- (NSString *)category {
+    return [[category retain] autorelease];
+}
+
+- (void)setCategory:(NSString *)value {
+    if (category != value) {
+        [category release];
+        category = [value copy];
+    }
+}
+
 - (NSString *)state {
     return [[state retain] autorelease];
 }

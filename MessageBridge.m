@@ -26,6 +26,12 @@
     [builderDict setObject:b forKey:buildername];
 }
 
+-(void)builderCategorized:(NSString *)buildername
+                 category:(NSString *)cat {
+    NSLog(@"Categorized builder %@ as %@", buildername, cat);
+    [[builderDict valueForKey:buildername] setCategory:cat];
+}
+
 -(void)builderRemoved:(NSString *)buildername {
     NSLog(@"Removed builder %@", buildername);
     [builders removeObject: [builderDict objectForKey:buildername]];

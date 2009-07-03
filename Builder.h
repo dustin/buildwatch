@@ -15,6 +15,7 @@
 @interface Builder : NSObject {
 
     NSString *name;
+    NSString *category;
     NSString *state;
     NSString *step;
     NSString *status;
@@ -26,6 +27,9 @@
 
 - (NSString *)name;
 - (void)setName:(NSString *)value;
+
+- (NSString *)category;
+- (void)setCategory:(NSString *)category;
 
 - (NSString *)state;
 - (void)setState:(NSString *)value;

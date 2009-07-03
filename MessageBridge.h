@@ -19,6 +19,8 @@
 -(void)builderAdded:(NSString *)buildername;
 -(void)builderRemoved:(NSString *)buildername;
 
+-(void)builderCategorized:(NSString *)buildername category:(NSString *)cat;
+
 -(void)builderChangedState:(NSString *)buildername state:(NSString *)state eta:(NSString *)eta;
 
 -(void)buildStarted:(NSString *)buildername;

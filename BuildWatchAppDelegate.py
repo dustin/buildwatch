@@ -38,6 +38,10 @@ class StatusClient(pb.Referenceable):
 
     def remote_builderAdded(self, buildername, builder):
         self.queue.put(lambda b: b.builderAdded_(buildername))
+        def _gotCat(c):
+            self.queue.put(lambda b: b.builderCategorized_category_(
+                    buildername, c))
+        builder.callRemote("getCategory").addCallback(_gotCat)
 
     def remote_builderRemoved(self, buildername):
         self.queue.put(lambda b: b.builderRemoved_(buildername))
