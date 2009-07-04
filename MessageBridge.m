@@ -15,6 +15,21 @@
 -(id)init {
     id rv=[super init];
     builderDict=[[NSMutableDictionary alloc] initWithCapacity:10];
+    categories=[[NSMutableDictionary alloc] initWithCapacity:10];
+    return rv;
+}
+
+-(Category*)category:(NSString *)name {
+    Category *rv = [categories objectForKey:name];
+    if (rv == nil) {
+        rv = [[Category alloc] initWithName: name];
+        [categories setObject:rv forKey:name];
+
+        [builders setContent: [categories allValues]];
+
+        [rv release];
+        NSLog(@"Created new category:  %@", name);
+    }
     return rv;
 }
 
@@ -22,14 +37,31 @@
     NSLog(@"Added builder %@", buildername);
     Builder *b=[[Builder alloc] init];
     [b setName:buildername];
-    [builders addObject:b];
     [builderDict setObject:b forKey:buildername];
+}
+
+-(void)removeBuilder:(Builder*)builder fromCategory:(NSString *)catName {
+    Category *cat = [categories objectForKey: catName];
+    if (cat) {
+        NSLog(@"Removing %@ from category %@", [builder name], catName);
+        [cat removeBuilder: builder];
+        if ([cat numChildren] == 0) {
+            NSLog(@"Disposing of empty category:  %@", catName);
+            [categories removeObjectForKey: catName];
+            [builders setContent: [categories allValues]];
+            [outlineView reloadItem:nil reloadChildren:YES];
+        }
+    }
 }
 
 -(void)builderCategorized:(NSString *)buildername
                  category:(NSString *)cat {
     NSLog(@"Categorized builder %@ as %@", buildername, cat);
-    [[builderDict valueForKey:buildername] setCategory:cat];
+    Builder *builder = [builderDict valueForKey:buildername];
+
+    [self removeBuilder:builder fromCategory:[builder category]];
+    [builder setCategory:cat];
+    [[self category:cat] addBuilder: builder];
 }
 
 -(void)builderRemoved:(NSString *)buildername {
@@ -40,8 +72,9 @@
 
 -(void)disconnected:(id)sender {
     NSAutoreleasePool *pool=[[NSAutoreleasePool alloc] init];
-    [builders removeObjects:[builderDict allValues]];
+    [categories removeAllObjects];
     [builderDict removeAllObjects];
+    [builders setContent:nil];
     [pool release];
 }
 

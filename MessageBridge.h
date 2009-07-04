@@ -7,13 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Category.h"
 #import "Growl-WithInstaller/GrowlApplicationBridge.h"
 
 @interface MessageBridge : NSObject <GrowlApplicationBridgeDelegate> {
 
-    IBOutlet NSArrayController *builders;
-    NSMutableDictionary *builderDict;
+    IBOutlet NSTreeController *builders;
+    IBOutlet NSOutlineView *outlineView;
 
+    NSMutableDictionary *builderDict;
+    NSMutableDictionary *categories;
 }
 
 -(void)builderAdded:(NSString *)buildername;
@@ -32,5 +35,7 @@
     stepname:(NSString *)stepname result:(int)result;
 -(void)stepETAUpdate:(NSString *)buildername
     stepname:(NSString *)stepname eta:(NSString *)eta;
+
+-(Category*)category:(NSString *)cat;
 
 @end

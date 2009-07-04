@@ -11,6 +11,10 @@
 
 @implementation Builder
 
+-(BOOL)isLeaf {
+    return YES;
+}
+
 -(NSString *)description {
     return [NSString stringWithFormat:@"[Builder: %@]", name];
 }
