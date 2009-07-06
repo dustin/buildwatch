@@ -12,6 +12,20 @@
 		<language>en</language>
 
     <item>
+			<title>Version 1.2.1</title>
+			<description>
+				&lt;p>
+          Fixed the date format for ETA.
+				&lt;/p>
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Mon, 06 Jul 2009 20:37:17 GMT</pubDate>
+			<enclosure
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.2.1.zip"
+				length="3356580" type="application/octet-stream"/>
+    </item>
+
+    <item>
 			<title>Version 1.2</title>
 			<description>
 				&lt;p>
@@ -19,7 +33,6 @@
         in a tree view.
 				&lt;/p>
 			</description>
-			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
 			<pubDate>Sat, 04 Jul 2009 01:23:09 GMT</pubDate>
 			<enclosure
 				url="http://buildwatch.googlecode.com/files/BuildWatch_1.2.zip"
