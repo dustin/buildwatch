@@ -31,7 +31,19 @@
 }
 
 -(NSString *)eta {
-    return nil;
+    NSDate *rv = nil;
+
+    NSEnumerator *enumerator = [builderDict objectEnumerator];
+    id b;
+    while ((b = [enumerator nextObject]) != nil) {
+        NSDate *builderDate = [b eta];
+        if (rv == nil) {
+            rv = builderDate;
+        } else if (builderDate != nil) {
+            rv = [rv laterDate: builderDate];
+        }
+    }
+    return rv;
 }
 
 -(NSArray*)items {
@@ -72,6 +84,11 @@
                  options:(NSKeyValueObservingOptionNew |
                           NSKeyValueObservingOptionOld)
                  context:NULL];
+    [builder addObserver:self
+              forKeyPath:@"eta"
+                 options:(NSKeyValueObservingOptionNew |
+                          NSKeyValueObservingOptionOld)
+                 context:NULL];
 }
 
 -(void)removeBuilder:(Builder*)builder {
@@ -81,8 +98,8 @@
     [self didChangeValueForKey:@"numChildren"];
     [self didChangeValueForKey:@"items"];
 
-    [builder removeObserver:self
-                 forKeyPath:@"color"];
+    [builder removeObserver:self forKeyPath:@"color"];
+    [builder removeObserver:self forKeyPath:@"eta"];
 }
 
 - (BOOL)isBuilding
@@ -140,6 +157,10 @@
 {
     if ([keyPath isEqual:@"color"]) {
         [self computeColor];
+    } else if ([keyPath isEqual:@"eta"]) {
+        // This is always derived, so just declare it changed.
+        [self willChangeValueForKey:@"eta"];
+        [self didChangeValueForKey:@"eta"];
     }
 }
 
