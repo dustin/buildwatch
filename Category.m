@@ -15,6 +15,7 @@
     id rv = [super init];
     builderDict = [[NSMutableDictionary alloc] initWithCapacity: 10];
     name = [catName retain];
+    [self setColor: [NSColor blackColor]];
     return rv;
 }
 
@@ -126,27 +127,26 @@
 
 - (void)computeColor
 {
+    int status = 0;
+    NSEnumerator *enumerator = [builderDict objectEnumerator];
+    id b;
+    while ((b = [enumerator nextObject]) != nil) {
+        status = MAX(status, [b lastBuildResult]);
+    }
 
-    if ([self isBuilding]) {
+    if (status == BUILDBOT_FAILURE) {
+        [self setColor:[NSColor redColor]];
+    } else if (status == BUILDBOT_WARNING) {
+        [self setColor:[NSColor orangeColor]];
+    } else if ([self isBuilding]) {
         [self setColor:[NSColor colorWithCalibratedRed:0.0
                                                  green:0.5
                                                   blue:0.0
                                                  alpha:1.0]];
+    } else if (status == BUILDBOT_SUCCESS) {
+        [self setColor:[NSColor blackColor]];
     } else {
-        int status = 0;
-        NSEnumerator *enumerator = [builderDict objectEnumerator];
-        id b;
-        while ((b = [enumerator nextObject]) != nil) {
-            status = MAX(status, [b lastBuildResult]);
-        }
-
-        if(status == BUILDBOT_SUCCESS) {
-            [self setColor:[NSColor blackColor]];
-        } else if(status == BUILDBOT_WARNING) {
-            [self setColor:[NSColor orangeColor]];
-        } else {
-            [self setColor:[NSColor redColor]];
-        }
+        [self setColor:[NSColor redColor]];
     }
 }
 
