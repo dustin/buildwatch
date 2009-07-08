@@ -100,6 +100,12 @@
     [b setLastBuildResult:result];
 }
 
+-(void)gotURL:(NSString *)url forBuilder:(NSString *)buildername {
+    NSLog(@"Got URL:  %@ for builder:  %@", url, buildername);
+    Builder *b=[builderDict valueForKey:buildername];
+    [b setURL: url];
+}
+
 -(void)buildFinished:(NSString *)buildername result:(int)result {
     NSLog(@"A build finished on %@ -- result: %d", buildername, result);
     Builder *b=[builderDict valueForKey:buildername];

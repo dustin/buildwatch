@@ -11,8 +11,11 @@
 
 @interface MainController : NSWindowController {
 
+    IBOutlet NSTreeController *treeController;
     IBOutlet NSTextField *clock;
 
 }
+
+-(IBAction)onDoubleClick:(id)sender;
 
 @end

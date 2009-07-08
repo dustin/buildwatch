@@ -31,6 +31,10 @@
     return nil;
 }
 
+-(NSString *)url {
+    return nil;
+}
+
 -(NSString *)eta {
     NSDate *rv = nil;
 

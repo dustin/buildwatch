@@ -37,6 +37,14 @@ class StatusClient(pb.Referenceable):
         self.remote = remote
         remote.callRemote("subscribe", self.events, 5, self)
 
+    def _getBuildURL(self, buildername, build):
+        def _gotBuildURL(u, buildername):
+            self.queue.put(lambda b: b.gotURL_forBuilder_(u, buildername))
+
+        d = self.remote.callRemote("getURLForThing", build)
+        d.addCallback(_gotBuildURL, buildername)
+        d.addErrback(log.err)
+
     def remote_builderAdded(self, buildername, builder):
         self.queue.put(lambda b: b.builderAdded_(buildername))
 
@@ -58,6 +66,8 @@ class StatusClient(pb.Referenceable):
                 d.addCallback(_gotLastBuildResult)
                 d.addErrback(log.err)
 
+                self._getBuildURL(buildername, b)
+
         d = builder.callRemote("getLastFinishedBuild")
         d.addCallback(_gotBuild)
         d.addErrback(log.err)
@@ -71,6 +81,7 @@ class StatusClient(pb.Referenceable):
 
     def remote_buildStarted(self, buildername, build):
         self.queue.put(lambda b: b.buildStarted_(buildername))
+        self._getBuildURL(buildername, build)
 
     def remote_buildFinished(self, buildername, build, result):
         self.queue.put(lambda b:

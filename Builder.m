@@ -120,6 +120,15 @@
     return ! [status isEqualToString:@"offline"];
 }
 
+- (void)setURL:(NSString *)to {
+    [url release];
+    url = [to retain];
+}
+
+- (NSString *)url {
+    return [[url retain] autorelease];
+}
+
 - (NSColor *)color {
     NSColor *rv;
     if([status isEqualToString:@"idle"]) {

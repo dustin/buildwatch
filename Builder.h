@@ -23,6 +23,7 @@
     NSDate *stepeta;
     NSDate *eta;
 
+    NSString *url;
 }
 
 - (NSString *)name;
@@ -51,6 +52,9 @@
 
 - (BOOL)isBuilding;
 - (BOOL)online;
+
+- (void)setURL:(NSString *)to;
+- (NSString *)url;
 
 - (NSColor *)color;
 

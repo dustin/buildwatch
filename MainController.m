@@ -26,4 +26,16 @@
         repeats:YES];
 }
 
+-(IBAction)onDoubleClick:(id)sender {
+    NSArray *selected = [treeController selectedObjects];
+    if (selected != nil && [selected count] > 0) {
+        NSString *urlStr = [[selected objectAtIndex: 0] url];
+        if (urlStr != nil) {
+            NSURL *url=[NSURL URLWithString:urlStr];
+            NSLog(@"Opening %@", url);
+            [[NSWorkspace sharedWorkspace] openURL:url];
+        }
+    }
+}
+
 @end
