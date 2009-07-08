@@ -49,6 +49,9 @@
 - (int)lastBuildResult;
 - (void)setLastBuildResult:(int)value;
 
+- (BOOL)isBuilding;
+- (BOOL)online;
+
 - (NSColor *)color;
 
 @end

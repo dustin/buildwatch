@@ -12,6 +12,7 @@
 @interface Category : NSObject {
 
     NSMutableDictionary *builderDict;
+    NSColor *color;
 
     NSString *name;
 }
@@ -25,5 +26,7 @@
 
 -(int)numChildren;
 -(NSArray*)items;
+
+-(NSColor *)color;
 
 @end

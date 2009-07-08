@@ -110,6 +110,16 @@
     }
 }
 
+- (BOOL)isBuilding
+{
+    return [status isEqualToString:@"building"];
+}
+
+- (BOOL)online
+{
+    return ! [status isEqualToString:@"offline"];
+}
+
 - (NSColor *)color {
     NSColor *rv;
     if([status isEqualToString:@"idle"]) {

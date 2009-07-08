@@ -42,10 +42,6 @@
     return [builderDict count];
 }
 
--(id)color {
-    return [NSColor blackColor];
-}
-
 -(BOOL)isLeaf {
     return NO;
 }
@@ -70,6 +66,12 @@
     [builderDict setObject:builder forKey:[builder name]];
     [self didChangeValueForKey:@"numChildren"];
     [self didChangeValueForKey:@"items"];
+
+    [builder addObserver:self
+              forKeyPath:@"color"
+                 options:(NSKeyValueObservingOptionNew |
+                          NSKeyValueObservingOptionOld)
+                 context:NULL];
 }
 
 -(void)removeBuilder:(Builder*)builder {
@@ -78,6 +80,67 @@
     [builderDict removeObjectForKey: [builder name]];
     [self didChangeValueForKey:@"numChildren"];
     [self didChangeValueForKey:@"items"];
+
+    [builder removeObserver:self
+                 forKeyPath:@"color"];
+}
+
+- (BOOL)isBuilding
+{
+    BOOL rv = NO;
+    NSEnumerator *enumerator = [builderDict objectEnumerator];
+    id b;
+    while ((b = [enumerator nextObject]) != nil) {
+        rv = rv || [b isBuilding];
+    }
+    return rv;
+}
+
+- (void)setColor:(NSColor *)to
+{
+    [color release];
+    color = [to retain];
+}
+
+- (NSColor *)color
+{
+    return [[color retain] autorelease];
+}
+
+- (void)computeColor
+{
+
+    if ([self isBuilding]) {
+        [self setColor:[NSColor colorWithCalibratedRed:0.0
+                                                 green:0.5
+                                                  blue:0.0
+                                                 alpha:1.0]];
+    } else {
+        int status = 0;
+        NSEnumerator *enumerator = [builderDict objectEnumerator];
+        id b;
+        while ((b = [enumerator nextObject]) != nil) {
+            status = MAX(status, [b lastBuildResult]);
+        }
+
+        if(status == BUILDBOT_SUCCESS) {
+            [self setColor:[NSColor blackColor]];
+        } else if(status == BUILDBOT_WARNING) {
+            [self setColor:[NSColor orangeColor]];
+        } else {
+            [self setColor:[NSColor redColor]];
+        }
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if ([keyPath isEqual:@"color"]) {
+        [self computeColor];
+    }
 }
 
 @end
