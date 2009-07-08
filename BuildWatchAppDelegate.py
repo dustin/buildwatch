@@ -15,6 +15,7 @@ import threading
 import Queue
 
 from twisted.spread import pb
+from twisted.python import log
 from twisted.cred import credentials, error
 from twisted.internet import reactor, task
 
@@ -38,6 +39,7 @@ class StatusClient(pb.Referenceable):
 
     def remote_builderAdded(self, buildername, builder):
         self.queue.put(lambda b: b.builderAdded_(buildername))
+
         def _gotCat(c):
             self.queue.put(lambda b: b.builderCategorized_category_(
                     buildername, c))
@@ -45,6 +47,20 @@ class StatusClient(pb.Referenceable):
             self.queue.put(lambda b: b.builderCategorized_category_(
                     buildername, 'Uncategorized'))
         builder.callRemote("getCategory").addCallback(_gotCat).addErrback(_failedCat)
+
+        def _gotLastBuildResult(r):
+            self.queue.put(lambda b: b.gotBuildResult_result_(
+                    buildername, r))
+
+        def _gotBuild(b):
+            if b:
+                d = b.callRemote("getResults")
+                d.addCallback(_gotLastBuildResult)
+                d.addErrback(log.err)
+
+        d = builder.callRemote("getLastFinishedBuild")
+        d.addCallback(_gotBuild)
+        d.addErrback(log.err)
 
     def remote_builderRemoved(self, buildername):
         self.queue.put(lambda b: b.builderRemoved_(buildername))
