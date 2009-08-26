@@ -7,7 +7,7 @@
 //
 
 #import "MainController.h"
-
+#import "keyboard_leds.h"
 
 @implementation MainController
 
@@ -36,6 +36,10 @@
             [[NSWorkspace sharedWorkspace] openURL:url];
         }
     }
+}
+
+-(IBAction)turnOffCapsLock:(id)sender {
+	manipulate_led(kHIDUsage_LED_CapsLock, 0);
 }
 
 @end

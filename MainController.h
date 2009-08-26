@@ -17,5 +17,6 @@
 }
 
 -(IBAction)onDoubleClick:(id)sender;
+-(IBAction)turnOffCapsLock:(id)sender;
 
 @end
