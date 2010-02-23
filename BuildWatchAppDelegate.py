@@ -27,38 +27,42 @@ class StatusClient(pb.Referenceable):
     buildmaster's StatusClientPerspective object.
     """
 
-    def __init__(self, events, q):
+    def __init__(self, master, events, q):
         self.builders = {}
+        self.master = master
         self.events = events
         self.queue = q
 
     def connected(self, remote):
-        print "connected"
+        print "connected to", self.master
         self.remote = remote
         remote.callRemote("subscribe", self.events, 5, self)
 
     def _getBuildURL(self, buildername, build):
         def _gotBuildURL(u, buildername):
-            self.queue.put(lambda b: b.gotURL_forBuilder_(u, buildername))
+            self.queue.put(lambda b: b.gotURL_forBuilder_onMaster_(u,
+                                                                   buildername,
+                                                                   self.master))
 
         d = self.remote.callRemote("getURLForThing", build)
         d.addCallback(_gotBuildURL, buildername)
         d.addErrback(log.err)
 
     def remote_builderAdded(self, buildername, builder):
-        self.queue.put(lambda b: b.builderAdded_(buildername))
+        self.queue.put(lambda b: b.builderAdded_onMaster_(buildername,
+                                                          self.master))
 
         def _gotCat(c):
-            self.queue.put(lambda b: b.builderCategorized_category_(
-                    buildername, c))
+            self.queue.put(lambda b: b.builderCategorized_onMaster_category_(
+                    buildername, self.master, c))
         def _failedCat(c):
-            self.queue.put(lambda b: b.builderCategorized_category_(
-                    buildername, 'Uncategorized'))
+            self.queue.put(lambda b: b.builderCategorized_onMaster_category_(
+                    buildername, self.master, 'Uncategorized'))
         builder.callRemote("getCategory").addCallback(_gotCat).addErrback(_failedCat)
 
         def _gotLastBuildResult(r):
-            self.queue.put(lambda b: b.gotBuildResult_result_(
-                    buildername, r))
+            self.queue.put(lambda b: b.gotBuildResult_onMaster_result_(
+                    buildername, self.master, r))
 
         def _gotBuild(b):
             if b:
@@ -73,35 +77,48 @@ class StatusClient(pb.Referenceable):
         d.addErrback(log.err)
 
     def remote_builderRemoved(self, buildername):
-        self.queue.put(lambda b: b.builderRemoved_(buildername))
+        self.queue.put(lambda b: b.builderRemoved_fromMaster(buildername,
+                                                             self.master))
 
     def remote_builderChangedState(self, buildername, state, eta):
         self.queue.put(lambda b:
-            b.builderChangedState_state_eta_(buildername, state, str(eta)))
+            b.builderChangedState_onMaster_state_eta_(buildername,
+                                                      self.master,
+                                                      state, str(eta)))
 
     def remote_buildStarted(self, buildername, build):
-        self.queue.put(lambda b: b.buildStarted_(buildername))
+        self.queue.put(lambda b: b.buildStarted_onMaster(buildername,
+                                                         self.master))
         self._getBuildURL(buildername, build)
 
     def remote_buildFinished(self, buildername, build, result):
         self.queue.put(lambda b:
-            b.buildFinished_result_(buildername, int(result)))
+            b.buildFinished_onMaster_result_(buildername,
+                                             self.master,
+                                             int(result)))
 
     def remote_buildETAUpdate(self, buildername, build, eta):
-        self.queue.put(lambda b: b.buildETAUpdate_eta_(buildername, eta))
+        self.queue.put(lambda b: b.buildETAUpdate_onMaster_eta_(buildername,
+                                                                self.master,
+                                                                eta))
 
     def remote_stepStarted(self, buildername, build, stepname, step):
-        self.queue.put(lambda b: b.stepStarted_stepname_(buildername, stepname))
+        self.queue.put(lambda b: b.stepStarted_onMaster_stepname_(buildername,
+                                                                  self.master,
+                                                                  stepname))
 
     def remote_stepFinished(self, buildername, build, stepname, step, result):
         self.queue.put(lambda b:
-            b.stepFinished_stepname_result_(buildername, stepname,
-                int(result[0])))
+            b.stepFinished_onMaster_stepname_result_(buildername,
+                                                     self.master,
+                                                     stepname,
+                                                     int(result[0])))
 
     def remote_stepETAUpdate(self, buildername, build, stepname, step,
                              eta, expectations):
         self.queue.put(lambda b:
-            b.stepETAUpdate_stepname_eta_(buildername, stepname, eta))
+            b.stepETAUpdate_onMaster_stepname_eta_(buildername, self.master,
+                                                   stepname, eta))
 
     def remote_logStarted(self, buildername, build, stepname, step,
                           logname, log):
@@ -130,7 +147,7 @@ class BridgeClient:
         """
         self.master = master
         self.queue = queue
-        self.listener = StatusClient(events, queue)
+        self.listener = StatusClient(master, events, queue)
         self.lastMessage = time.time()
         self.remote = None
         self.running = True

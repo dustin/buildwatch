@@ -19,7 +19,7 @@
     return rv;
 }
 
--(Category*)category:(NSString *)name {
+-(Category*)category:(NSString *)name onMaster:(NSString *)master {
     Category *rv = [categories objectForKey:name];
     if (rv == nil) {
         rv = [[Category alloc] initWithName: name];
@@ -33,14 +33,16 @@
     return rv;
 }
 
--(void)builderAdded:(NSString *)buildername {
+-(void)builderAdded:(NSString *)buildername onMaster:(NSString *)master {
     NSLog(@"Added builder %@", buildername);
     Builder *b=[[Builder alloc] init];
     [b setName:buildername];
     [builderDict setObject:b forKey:buildername];
 }
 
--(void)removeBuilder:(Builder*)builder fromCategory:(NSString *)catName {
+-(void)removeBuilder:(Builder*)builder
+          fromMaster:(NSString*)master
+        fromCategory:(NSString *)catName {
     Category *cat = [categories objectForKey: catName];
     if (cat) {
         NSLog(@"Removing %@ from category %@", [builder name], catName);
@@ -55,16 +57,18 @@
 }
 
 -(void)builderCategorized:(NSString *)buildername
+                 onMaster:(NSString *)master
                  category:(NSString *)cat {
     NSLog(@"Categorized builder %@ as %@", buildername, cat);
     Builder *builder = [builderDict valueForKey:buildername];
 
-    [self removeBuilder:builder fromCategory:[builder category]];
+    [self removeBuilder:builder fromMaster:master fromCategory:[builder category]];
     [builder setCategory:cat];
-    [[self category:cat] addBuilder: builder];
+    [[self category:cat onMaster:master] addBuilder: builder];
 }
 
--(void)builderRemoved:(NSString *)buildername {
+-(void)builderRemoved:(NSString *)buildername
+           fromMaster:(NSString *)master {
     NSLog(@"Removed builder %@", buildername);
     [builders removeObject: [builderDict objectForKey:buildername]];
     [builderDict removeObjectForKey:buildername];
@@ -78,12 +82,16 @@
     [pool release];
 }
 
--(void)builderChangedState:(NSString *)buildername state:(NSString *)state eta:(NSString *)eta {
+-(void)builderChangedState:(NSString *)buildername
+                  onMaster:(NSString *)master
+                     state:(NSString *)state
+                       eta:(NSString *)eta {
     NSLog(@"Builder %@ changed state to %@.  Eta is %@", buildername, state, eta);
     [[builderDict valueForKey:buildername] setStatus:state];
 }
 
--(void)buildStarted:(NSString *)buildername {
+-(void)buildStarted:(NSString *)buildername
+           onMaster:(NSString *)master {
     NSLog(@"A build started on %@", buildername);
     [GrowlApplicationBridge
         notifyWithTitle:@"Starting Build"
@@ -95,18 +103,24 @@
         clickContext:nil];
 }
 
--(void)gotBuildResult:(NSString *)buildername result:(int)result {
+-(void)gotBuildResult:(NSString *)buildername
+             onMaster:(NSString *)master
+               result:(int)result {
     Builder *b=[builderDict valueForKey:buildername];
     [b setLastBuildResult:result];
 }
 
--(void)gotURL:(NSString *)url forBuilder:(NSString *)buildername {
+-(void)gotURL:(NSString *)url
+   forBuilder:(NSString *)buildername
+     onMaster:(NSString *)master {
     NSLog(@"Got URL:  %@ for builder:  %@", url, buildername);
     Builder *b=[builderDict valueForKey:buildername];
     [b setURL: url];
 }
 
--(void)buildFinished:(NSString *)buildername result:(int)result {
+-(void)buildFinished:(NSString *)buildername
+            onMaster:(NSString *)master
+              result:(int)result {
     NSLog(@"A build finished on %@ -- result: %d", buildername, result);
     Builder *b=[builderDict valueForKey:buildername];
     [b setLastBuildResult:result];
@@ -145,7 +159,9 @@
     }
 }
 
--(void)buildETAUpdate:(NSString *)buildername eta:(NSString *)eta {
+-(void)buildETAUpdate:(NSString *)buildername
+             onMaster:(NSString *)master
+                  eta:(NSString *)eta {
     NSLog(@"ETA update for %@: %@", buildername, eta);
     if(eta != nil) {
         Builder *b=[builderDict valueForKey:buildername];
@@ -153,7 +169,9 @@
     }
 }
 
--(void)stepStarted:(NSString *)buildername stepname:(NSString *)stepname {
+-(void)stepStarted:(NSString *)buildername
+          onMaster:(NSString *)master
+          stepname:(NSString *)stepname {
     NSLog(@"Build %@ started step %@", buildername, stepname);
     [[builderDict valueForKey:buildername] setStep:stepname];
     [GrowlApplicationBridge
@@ -167,7 +185,9 @@
 }
 
 -(void)stepFinished:(NSString *)buildername
-    stepname:(NSString *)stepname result:(int)result {
+           onMaster:(NSString *)master
+           stepname:(NSString *)stepname
+             result:(int)result {
     NSLog(@"Build %@ completed step %@ with %d", buildername, stepname, result);
     [[builderDict valueForKey:buildername] setStep:nil];
     if(result == BUILDBOT_SUCCESS) {
@@ -201,7 +221,9 @@
 }
 
 -(void)stepETAUpdate:(NSString *)buildername
-    stepname:(NSString *)stepname eta:(NSString *)eta {
+            onMaster:(NSString *)master
+            stepname:(NSString *)stepname
+                 eta:(NSString *)eta {
     NSLog(@"Step ETA update for %@ on %@: %@", stepname, buildername, eta);
     if(eta != nil) {
         Builder *b=[builderDict valueForKey:buildername];

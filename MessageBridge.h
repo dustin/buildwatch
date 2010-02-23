@@ -19,23 +19,43 @@
     NSMutableDictionary *categories;
 }
 
--(void)builderAdded:(NSString *)buildername;
--(void)builderRemoved:(NSString *)buildername;
+-(void)builderAdded:(NSString *)buildername
+           onMaster:(NSString *)master;
+-(void)builderRemoved:(NSString *)buildername
+           fromMaster:(NSString *)master;
 
--(void)builderCategorized:(NSString *)buildername category:(NSString *)cat;
+-(void)builderCategorized:(NSString *)buildername
+                 onMaster:(NSString *)master
+                 category:(NSString *)cat;
 
--(void)builderChangedState:(NSString *)buildername state:(NSString *)state eta:(NSString *)eta;
+-(void)builderChangedState:(NSString *)buildername
+                  onMaster:(NSString *)master
+                     state:(NSString *)state
+                       eta:(NSString *)eta;
 
--(void)buildStarted:(NSString *)buildername;
--(void)buildFinished:(NSString *)buildername result:(int)result;
--(void)buildETAUpdate:(NSString *)buildername eta:(NSString *)eta;
+-(void)buildStarted:(NSString *)buildername
+           onMaster:(NSString *)master;
+-(void)buildFinished:(NSString *)buildername
+            onMaster:(NSString *)master
+              result:(int)result;
+-(void)buildETAUpdate:(NSString *)buildername
+             onMaster:(NSString *)master
+                  eta:(NSString *)eta;
 
--(void)stepStarted:(NSString *)buildername stepname:(NSString *)stepname;
+-(void)stepStarted:(NSString *)buildername
+          onMaster:(NSString *)master
+          stepname:(NSString *)stepname;
 -(void)stepFinished:(NSString *)buildername
-    stepname:(NSString *)stepname result:(int)result;
--(void)stepETAUpdate:(NSString *)buildername
-    stepname:(NSString *)stepname eta:(NSString *)eta;
+           onMaster:(NSString *)master
+           stepname:(NSString *)stepname
+             result:(int)result;
 
--(Category*)category:(NSString *)cat;
+-(void)stepETAUpdate:(NSString *)buildername
+            onMaster:(NSString *)master
+            stepname:(NSString *)stepname
+                 eta:(NSString *)eta;
+
+-(Category*)category:(NSString *)cat
+            onMaster:(NSString *)master;
 
 @end

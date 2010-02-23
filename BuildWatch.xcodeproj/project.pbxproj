@@ -21,6 +21,7 @@
 		DA6007B90DB95BAA00237DC9 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = DA6007B70DB95BAA00237DC9 /* Credits.html */; };
 		DA69994A0DB953AE0007E38B /* keyboard_leds.c in Sources */ = {isa = PBXBuildFile; fileRef = DA6999490DB953AE0007E38B /* keyboard_leds.c */; };
 		DA6999630DB956A70007E38B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA6999620DB956A70007E38B /* IOKit.framework */; };
+		DAC0C3B311337BD700D9B0B0 /* Master.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC0C3B211337BD700D9B0B0 /* Master.m */; };
 		DAE03EAD0D7FB0EF00518D60 /* Builder.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE03EAC0D7FB0EF00518D60 /* Builder.m */; };
 		DAE03F760D7FC96F00518D60 /* Growl-WithInstaller.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE03F750D7FC96F00518D60 /* Growl-WithInstaller.framework */; };
 		DAE03F870D7FCA2300518D60 /* Growl-WithInstaller.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAE03F750D7FC96F00518D60 /* Growl-WithInstaller.framework */; };
@@ -66,6 +67,8 @@
 		DA6999490DB953AE0007E38B /* keyboard_leds.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = keyboard_leds.c; sourceTree = "<group>"; };
 		DA6999500DB954050007E38B /* keyboard_leds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keyboard_leds.h; sourceTree = "<group>"; };
 		DA6999620DB956A70007E38B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		DAC0C3B111337BD700D9B0B0 /* Master.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Master.h; sourceTree = "<group>"; };
+		DAC0C3B211337BD700D9B0B0 /* Master.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Master.m; sourceTree = "<group>"; };
 		DAE03EAB0D7FB0EF00518D60 /* Builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Builder.h; sourceTree = "<group>"; };
 		DAE03EAC0D7FB0EF00518D60 /* Builder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Builder.m; sourceTree = "<group>"; };
 		DAE03F750D7FC96F00518D60 /* Growl-WithInstaller.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "Growl-WithInstaller.framework"; sourceTree = "<group>"; };
@@ -111,6 +114,8 @@
 				DAE268DA0D86E94B0025AE3E /* MainController.m */,
 				DA1F1D6F0FFE8EFE00714647 /* Category.h */,
 				DA1F1D700FFE8EFE00714647 /* Category.m */,
+				DAC0C3B111337BD700D9B0B0 /* Master.h */,
+				DAC0C3B211337BD700D9B0B0 /* Master.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -254,6 +259,7 @@
 				DAE268DB0D86E94B0025AE3E /* MainController.m in Sources */,
 				DA69994A0DB953AE0007E38B /* keyboard_leds.c in Sources */,
 				DA1F1D710FFE8EFE00714647 /* Category.m in Sources */,
+				DAC0C3B311337BD700D9B0B0 /* Master.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
