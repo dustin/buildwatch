@@ -12,6 +12,21 @@
 		<language>en</language>
 
     <item>
+			<title>Version 1.4.1</title>
+			<description>
+              &lt;p>
+                Fixing bug in build start notification with master.
+              &lt;/p>
+
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Tue, 23 Feb 2010 08:40:10 GMT</pubDate>
+			<enclosure
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.4.1.zip"
+				length="3365273" type="application/octet-stream"/>
+    </item>
+
+    <item>
 			<title>Version 1.4</title>
 			<description>
               &lt;p>
@@ -25,7 +40,6 @@
                 will have a better UI for this.
               &lt;/p>
 			</description>
-			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
 			<pubDate>Tue, 23 Feb 2010 06:40:51 GMT</pubDate>
 			<enclosure
 				url="http://buildwatch.googlecode.com/files/BuildWatch_1.4.zip"
