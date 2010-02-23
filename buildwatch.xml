@@ -12,6 +12,21 @@
 		<language>en</language>
 
     <item>
+			<title>Version 1.4.2</title>
+			<description>
+              &lt;p>
+                Handle a bad initial result from an upstream master.
+              &lt;/p>
+
+			</description>
+			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
+			<pubDate>Tue, 23 Feb 2010 09:51:01 GMT</pubDate>
+			<enclosure
+				url="http://buildwatch.googlecode.com/files/BuildWatch_1.4.2.zip"
+				length="3370745" type="application/octet-stream"/>
+    </item>
+
+    <item>
 			<title>Version 1.4.1</title>
 			<description>
               &lt;p>
@@ -19,7 +34,6 @@
               &lt;/p>
 
 			</description>
-			<!-- date -u +"%a, %d %b %Y %H:%M:%S GMT" -->
 			<pubDate>Tue, 23 Feb 2010 08:40:10 GMT</pubDate>
 			<enclosure
 				url="http://buildwatch.googlecode.com/files/BuildWatch_1.4.1.zip"
