@@ -151,6 +151,7 @@ class BridgeClient:
         self.lastMessage = time.time()
         self.remote = None
         self.running = True
+        self.pinger = None
 
     def startConnecting(self):
         try:
@@ -181,9 +182,10 @@ class BridgeClient:
             self.hangUp()
 
     def ping(self):
-        print "Doing ping."
+        self.queue.put(lambda b: NSLog("Doing ping to " + self.master))
         def recordResponse(x):
-            print "Ping response:  %s" % x
+            self.queue.put(lambda b: NSLog("Ping response from %s: %s"
+                                           % (self.master, x)))
             self.lastMessage = time.time()
         reactor.callLater(PING_TIMEOUT, self.checkTimeout, self.lastMessage)
         self.remote.callRemote('ping').addBoth(recordResponse)
@@ -197,6 +199,7 @@ class BridgeClient:
         ref.notifyOnDisconnect(self.disconnected)
         self.remote = ref
         self.listener.connected(ref)
+        assert self.pinger is None
         self.pinger = task.LoopingCall(self.ping)
         self.pinger.start(PING_FREQUENCY)
 
@@ -212,6 +215,7 @@ buildbot.status.client.PBListener port and not to the slaveport?
     def disconnected(self, ref):
         print "lost connection from", self.master
         self.pinger.stop()
+        self.pinger = None
         def sendNotification(notused):
             NSNotificationCenter.defaultCenter().postNotificationName_object_(
                 'disconnected', self.master)
