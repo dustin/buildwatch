@@ -24,9 +24,24 @@
 
 -(void)applicationDidFinishLaunching:(id)sender {
     NSLog(@"Application did finish launching.");
+    [self reconnectAll];
+}
+
+-(void)reconnectAll {
     [[NSNotificationCenter defaultCenter]
-        postNotificationName: @"connect"
-        object: [[NSUserDefaults standardUserDefaults] objectForKey:@"location"]];
+        postNotificationName: @"disconnectAll" object: nil];
+
+    NSCharacterSet *seps = [NSCharacterSet characterSetWithCharactersInString:@", "];
+    NSString *loc = [[NSUserDefaults standardUserDefaults] objectForKey:@"location"];
+    NSArray *locations = [loc componentsSeparatedByCharactersInSet:seps];
+
+    NSEnumerator *enumerator = [locations objectEnumerator];
+    id l;
+    while ((l = [enumerator nextObject]) != nil) {
+        [[NSNotificationCenter defaultCenter]
+                postNotificationName: @"connect"
+                              object: l];
+    }
 }
 
 @end

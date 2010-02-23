@@ -7,20 +7,19 @@
 //
 
 #import "PrefController.h"
-
+#import "ApplicationDelegate.h"
 
 @implementation PrefController
 
 - (IBAction) savePrefs:(id)sender {
 	NSLog(@"Saving preferences.");
 	[defController save:self];
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName: @"disconnectAll" object: nil];
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName: @"connect"
-        object: [[NSUserDefaults standardUserDefaults] objectForKey:@"location"]];
 
-	[[self window] orderOut:self];
+    [NSTimer scheduledTimerWithTimeInterval:0.1
+                                     target:[NSApp delegate]
+                                   selector:@selector(reconnectAll)
+                                   userInfo:nil repeats:NO];
+    [[self window] orderOut:self];
 }
 
 @end

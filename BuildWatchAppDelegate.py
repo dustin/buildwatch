@@ -210,7 +210,7 @@ buildbot.status.client.PBListener port and not to the slaveport?
         return why
 
     def disconnected(self, ref):
-        print "lost connection"
+        print "lost connection from", self.master
         self.pinger.stop()
         def sendNotification(notused):
             NSNotificationCenter.defaultCenter().postNotificationName_object_(
@@ -237,7 +237,9 @@ class BuildWatchAppDelegate(NSObject):
 
     def startTask_(self, notification):
         loc=notification.object()
-        NSLog("Starting task connected to %@", loc)
+        if loc == '':
+            return
+        NSLog("Starting task connected to '%@'", loc)
         bc = BridgeClient(loc, self.queue)
         self.tasks[loc] = bc
         reactor.callFromThread(bc.startConnecting)
