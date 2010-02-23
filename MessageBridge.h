@@ -15,8 +15,7 @@
     IBOutlet NSTreeController *builders;
     IBOutlet NSOutlineView *outlineView;
 
-    NSMutableDictionary *builderDict;
-    NSMutableDictionary *categories;
+    NSMutableDictionary *masters;
 }
 
 -(void)builderAdded:(NSString *)buildername

@@ -7,16 +7,202 @@
 //
 
 #import "Master.h"
-
+#import "Growl-WithInstaller/GrowlApplicationBridge.h"
+#import "keyboard_leds.h"
 
 @implementation Master
 
 - (id)initWithName:(NSString *)masterName {
     id rv = [super init];
     categoryDict = [[NSMutableDictionary alloc] initWithCapacity: 10];
+    builderDict=[[NSMutableDictionary alloc] initWithCapacity:10];
     name = [masterName retain];
     [self setColor: [NSColor blackColor]];
     return rv;
+}
+
+-(Category*)category:(NSString *)catname {
+    Category *rv = [categoryDict objectForKey:catname];
+    if (rv == nil) {
+        rv = [[Category alloc] initWithName: catname];
+        [categoryDict setObject:rv forKey:catname];
+
+        [rv release];
+        NSLog(@"Created new category:  %@", catname);
+    }
+    return rv;
+}
+
+-(void)builderAdded:(Builder *)builder {
+    [builderDict setObject:builder forKey:[builder name]];
+}
+
+-(void)removeBuilder:(Builder *)builder
+        fromCategory:(NSString *)catName {
+    Category *cat = [categoryDict objectForKey: catName];
+    if (cat) {
+        NSLog(@"Removing %@ from category %@", [builder name], catName);
+        [cat removeBuilder: builder];
+        if ([cat numChildren] == 0) {
+            NSLog(@"Disposing of empty category:  %@", catName);
+            [categoryDict removeObjectForKey: catName];
+        }
+    }
+}
+
+-(void)builderCategorized:(NSString *)buildername
+                 category:(NSString *)cat {
+    NSLog(@"Categorized builder %@ as %@", buildername, cat);
+    Builder *builder = [builderDict valueForKey:buildername];
+
+    [self removeBuilder:builder fromCategory:[builder category]];
+    [builder setCategory:cat];
+    [[self category:cat] addBuilder: builder];
+}
+
+-(void)builderRemoved:(NSString *)buildername {
+    NSLog(@"Removed builder %@", buildername);
+    [builderDict removeObjectForKey:buildername];
+}
+
+-(void)builderChangedState:(NSString *)buildername
+                     state:(NSString *)state
+                       eta:(NSString *)eta {
+    NSLog(@"Builder %@ changed state to %@.  Eta is %@", buildername, state, eta);
+    [[builderDict valueForKey:buildername] setStatus:state];
+}
+
+-(void)buildStarted:(NSString *)buildername {
+    NSLog(@"A build started on %@", buildername);
+    [GrowlApplicationBridge
+        notifyWithTitle:@"Starting Build"
+        description:buildername
+        notificationName:@"BuildStarted"
+        iconData:nil
+        priority:0
+        isSticky:NO
+        clickContext:nil];
+}
+
+-(void)gotBuildResult:(NSString *)buildername
+               result:(int)result {
+    Builder *b=[builderDict valueForKey:buildername];
+    [b setLastBuildResult:result];
+}
+
+-(void)gotURL:(NSString *)url
+   forBuilder:(NSString *)buildername {
+    NSLog(@"Got URL:  %@ for builder:  %@", url, buildername);
+    Builder *b=[builderDict valueForKey:buildername];
+    [b setURL: url];
+}
+
+-(void)buildFinished:(NSString *)buildername
+              result:(int)result {
+    NSLog(@"A build finished on %@ -- result: %d", buildername, result);
+    Builder *b=[builderDict valueForKey:buildername];
+    [b setLastBuildResult:result];
+    [b setEta:nil];
+    [b setStepeta:nil];
+    if(result == BUILDBOT_SUCCESS) {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Completed Build"
+            description:buildername
+            notificationName:@"BuildSuccess"
+            iconData:nil
+            priority:0
+            isSticky:NO
+            clickContext:nil];
+    } else if(result == BUILDBOT_WARNING) {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Warnings in Build"
+            description:buildername
+            notificationName:@"BuildWarnings"
+            iconData:nil
+            priority:1
+            isSticky:NO
+            clickContext:nil];
+    } else {
+        if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCapsLock"]) {
+            manipulate_led(kHIDUsage_LED_CapsLock, 1);
+        }
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Build Failure"
+            description:buildername
+            notificationName:@"BuildFailed"
+            iconData:nil
+            priority:2
+            isSticky:YES
+            clickContext:@"Failure Notice"];
+    }
+}
+
+-(void)buildETAUpdate:(NSString *)buildername
+                  eta:(NSString *)eta {
+    NSLog(@"ETA update for %@: %@", buildername, eta);
+    if(eta != nil) {
+        Builder *b=[builderDict valueForKey:buildername];
+        [b setEta:[NSDate dateWithTimeIntervalSinceNow: [eta doubleValue]]];
+    }
+}
+
+-(void)stepStarted:(NSString *)buildername
+          stepname:(NSString *)stepname {
+    NSLog(@"Build %@ started step %@", buildername, stepname);
+    [[builderDict valueForKey:buildername] setStep:stepname];
+    [GrowlApplicationBridge
+        notifyWithTitle:@"Started Step"
+        description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
+        notificationName:@"StepStarted"
+        iconData:nil
+        priority:0
+        isSticky:NO
+        clickContext:nil];
+}
+
+-(void)stepFinished:(NSString *)buildername
+           stepname:(NSString *)stepname
+             result:(int)result {
+    NSLog(@"Build %@ completed step %@ with %d", buildername, stepname, result);
+    [[builderDict valueForKey:buildername] setStep:nil];
+    if(result == BUILDBOT_SUCCESS) {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Completed Step"
+            description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
+            notificationName:@"StepSuccess"
+            iconData:nil
+            priority:0
+            isSticky:NO
+            clickContext:nil];
+    } else if(result == BUILDBOT_WARNING) {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Step Warning"
+            description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
+            notificationName:@"StepWarning"
+            iconData:nil
+            priority:1
+            isSticky:YES
+            clickContext:nil];
+    } else {
+        [GrowlApplicationBridge
+            notifyWithTitle:@"Step Failure"
+            description:[NSString stringWithFormat:@"Step %@ on builder %@", stepname, buildername]
+            notificationName:@"StepFailed"
+            iconData:nil
+            priority:2
+            isSticky:YES
+            clickContext:nil];
+    }
+}
+
+-(void)stepETAUpdate:(NSString *)buildername
+            stepname:(NSString *)stepname
+                 eta:(NSString *)eta {
+    NSLog(@"Step ETA update for %@ on %@: %@", stepname, buildername, eta);
+    if(eta != nil) {
+        Builder *b=[builderDict valueForKey:buildername];
+        [b setStepeta:[NSDate dateWithTimeIntervalSinceNow: [eta doubleValue]]];
+    }
 }
 
 -(NSString *)name {
@@ -35,7 +221,7 @@
     return nil;
 }
 
--(NSString *)eta {
+-(NSDate *)eta {
     NSDate *rv = nil;
 
     NSEnumerator *enumerator = [categoryDict objectEnumerator];
