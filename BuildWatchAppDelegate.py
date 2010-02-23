@@ -61,8 +61,10 @@ class StatusClient(pb.Referenceable):
         builder.callRemote("getCategory").addCallback(_gotCat).addErrback(_failedCat)
 
         def _gotLastBuildResult(r):
+            if not r:
+                r = 0
             self.queue.put(lambda b: b.gotBuildResult_onMaster_result_(
-                    buildername, self.master, r))
+                    buildername, self.master, int(r)))
 
         def _gotBuild(b):
             if b:
