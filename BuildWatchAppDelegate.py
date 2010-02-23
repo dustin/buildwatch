@@ -87,7 +87,7 @@ class StatusClient(pb.Referenceable):
                                                       state, str(eta)))
 
     def remote_buildStarted(self, buildername, build):
-        self.queue.put(lambda b: b.buildStarted_onMaster(buildername,
+        self.queue.put(lambda b: b.buildStarted_onMaster_(buildername,
                                                          self.master))
         self._getBuildURL(buildername, build)
 
