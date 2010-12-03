@@ -54,7 +54,7 @@ class StatusClient(pb.Referenceable):
 
         def _gotCat(c):
             self.queue.put(lambda b: b.builderCategorized_onMaster_category_(
-                    buildername, self.master, c))
+                    buildername, self.master, c or 'Uncategorized'))
         def _failedCat(c):
             self.queue.put(lambda b: b.builderCategorized_onMaster_category_(
                     buildername, self.master, 'Uncategorized'))
