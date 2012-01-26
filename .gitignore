@@ -1,7 +1,9 @@
-build/
 *.mode1*
 *.mode2*
 *.pbxuser
+*.xcworkspace
+*~
 *~.nib
 .DS_Store
-*~
+build/
+xcuserdata
